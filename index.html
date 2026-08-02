@@ -3,21 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MARD | Pro Gaming Hub</title>
+  <title>MARD | 3D Gaming Hub</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/5968/5968267.png">
 
   <style>
     :root {
       --primary: #00ff88;
-      --primary-glow: rgba(0, 255, 136, 0.4);
-      --bg-dark: #050505;
-      --card-bg: #111111;
+      --primary-glow: rgba(0, 255, 136, 0.6);
+      --bg-dark: #030508;
+      --card-bg: rgba(15, 23, 42, 0.75);
       --text-main: #ffffff;
-    }
-
-    body.alt-theme {
-      --primary: #00e5ff;
-      --primary-glow: rgba(0, 229, 255, 0.4);
     }
 
     ::-webkit-scrollbar { width: 8px; }
@@ -26,114 +21,121 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
     html { scroll-behavior: smooth; }
-    body { background: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
-    img { max-width: 100%; height: auto; }
+    body { background: var(--bg-dark); color: var(--text-main); overflow-x: hidden; perspective: 1000px; }
 
-    /* Header & Side Menu */
-    header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(12px); background: rgba(10, 10, 10, 0.9); border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .logo { font-size: 26px; font-weight: 900; color: var(--primary); letter-spacing: 2px; text-shadow: 0 0 12px var(--primary-glow); }
-    .nav-actions { display: flex; gap: 10px; align-items: center; }
-    .menu-btn, .theme-btn { background: #1a1a1a; color: white; border: 1px solid #333; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.3s; font-weight: bold; }
-    .menu-btn:hover, .theme-btn:hover { border-color: var(--primary); color: var(--primary); }
+    /* Floating Background Particle Glows */
+    .bg-glow-1, .bg-glow-2 { position: fixed; width: 300px; height: 300px; border-radius: 50%; background: var(--primary); filter: blur(160px); opacity: 0.15; z-index: -1; }
+    .bg-glow-1 { top: -50px; left: -50px; }
+    .bg-glow-2 { bottom: -50px; right: -50px; }
 
-    /* Slide Navigation Drawer */
-    .side-nav { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: #0a0a0a; border-left: 1px solid var(--primary); z-index: 9999; transition: 0.4s ease; padding: 30px 20px; display: flex; flex-direction: column; gap: 20px; box-shadow: -10px 0 30px rgba(0,0,0,0.8); }
+    /* 3D Glass Header */
+    header { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(15px); background: rgba(5, 10, 20, 0.8); border-bottom: 1px solid rgba(0, 255, 136, 0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .logo { font-size: 28px; font-weight: 900; color: var(--primary); letter-spacing: 2px; text-shadow: 0 0 15px var(--primary-glow); transform: translateZ(20px); }
+    .menu-btn { background: rgba(0, 255, 136, 0.1); color: var(--primary); border: 1px solid var(--primary); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.3s; text-transform: uppercase; box-shadow: 0 0 10px rgba(0,255,136,0.2); }
+    .menu-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+
+    /* 3D Glass Navigation Drawer */
+    .side-nav { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: rgba(8, 14, 26, 0.95); backdrop-filter: blur(20px); border-left: 1px solid var(--primary); z-index: 9999; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 30px 20px; display: flex; flex-direction: column; gap: 15px; box-shadow: -15px 0 40px rgba(0,255,136,0.2); }
     .side-nav.active { right: 0; }
-    .side-nav .close-nav { align-self: flex-end; font-size: 24px; cursor: pointer; color: #888; }
-    .side-nav .close-nav:hover { color: var(--primary); }
-    .side-nav a { color: white; text-decoration: none; font-size: 18px; font-weight: bold; padding: 10px; border-radius: 8px; transition: 0.3s; display: block; border-bottom: 1px solid #151515; }
-    .side-nav a:hover { background: #151515; color: var(--primary); padding-left: 15px; }
+    .side-nav .close-nav { align-self: flex-end; font-size: 26px; cursor: pointer; color: #888; transition: 0.2s; }
+    .side-nav .close-nav:hover { color: var(--primary); transform: rotate(90deg); }
+    .side-nav h3 { color: var(--primary); text-transform: uppercase; letter-spacing: 1px; font-size: 18px; border-bottom: 1px solid rgba(0, 255, 136, 0.3); padding-bottom: 8px; margin-bottom: 10px; }
+    .side-nav a { color: white; text-decoration: none; font-size: 16px; font-weight: bold; padding: 12px 15px; border-radius: 10px; transition: 0.3s; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; }
+    .side-nav a:hover { background: rgba(0, 255, 136, 0.15); border-color: var(--primary); color: var(--primary); transform: translateX(-5px); }
 
-    /* Hero Section */
-    .hero { min-height: 70vh; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px; background: radial-gradient(circle, rgba(0,255,136,0.08) 0%, rgba(5,5,5,1) 100%); }
-    .hero h1 { font-size: 48px; font-weight: 800; text-shadow: 0 0 25px var(--primary-glow); margin-bottom: 10px; }
+    /* 3D Hero Section */
+    .hero { min-height: 70vh; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; }
+    .hero-card { background: rgba(10, 20, 35, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(0, 255, 136, 0.3); padding: 40px 25px; border-radius: 20px; max-width: 700px; box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,255,136,0.1); transform: rotateX(5deg); }
+    .hero h1 { font-size: 46px; font-weight: 900; text-shadow: 0 0 20px var(--primary-glow); margin-bottom: 15px; letter-spacing: 1px; }
     .hero h1 span { color: var(--primary); }
-    .hero p { color: #aaa; margin-bottom: 25px; font-size: 16px; }
+    .hero p { color: #aaa; margin-bottom: 30px; font-size: 16px; line-height: 1.6; }
 
-    /* Buttons */
-    .btn-main { background: var(--primary); color: #000; border: none; padding: 12px 28px; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 15px var(--primary-glow); }
-    .btn-main:hover { transform: translateY(-3px); background: white; color: black; }
+    /* 3D Glow Buttons */
+    .btn-3d { background: linear-gradient(135deg, #00ff88 0%, #00b862 100%); color: #000; border: none; padding: 14px 32px; border-radius: 12px; font-weight: 900; font-size: 15px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(0,255,136,0.3); position: relative; }
+    .btn-3d:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 255, 136, 0.6); background: #ffffff; color: #000; }
 
     /* Filter Controls */
-    .filter-container { display: flex; justify-content: center; gap: 10px; margin: 30px 0 10px; flex-wrap: wrap; padding: 0 15px; }
-    .filter-btn { background: #151515; color: #888; border: 1px solid #222; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 14px; }
-    .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+    .filter-container { display: flex; justify-content: center; gap: 12px; margin: 20px 0 30px; flex-wrap: wrap; padding: 0 15px; }
+    .filter-btn { background: rgba(15, 23, 42, 0.8); color: #888; border: 1px solid rgba(255,255,255,0.1); padding: 10px 22px; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 14px; backdrop-filter: blur(5px); }
+    .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); transform: translateY(-2px); }
 
-    /* Content Cards */
+    /* 3D Grid & Tilt Cards */
     section { padding: 40px 20px; text-align: center; }
-    section h2 { font-size: 28px; margin-bottom: 25px; }
-    .grid-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
+    section h2 { font-size: 32px; margin-bottom: 10px; text-shadow: 0 0 10px var(--primary-glow); }
+    .grid-container { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
 
-    .card { background: var(--card-bg); width: 310px; border-radius: 16px; border: 1px solid #222; overflow: hidden; text-align: left; transition: 0.4s; display: flex; flex-direction: column; }
-    .card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 25px var(--primary-glow); }
-    .card-img-wrap { position: relative; height: 170px; overflow: hidden; }
-    .card img { width: 100%; height: 100%; object-fit: cover; }
-    .card-tag { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--primary); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid var(--primary); }
+    .card-3d { background: var(--card-bg); width: 320px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.08); overflow: hidden; text-align: left; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); backdrop-filter: blur(12px); box-shadow: 0 15px 35px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+    .card-3d:hover { transform: translateY(-12px) rotateX(4deg) scale(1.02); border-color: var(--primary); box-shadow: 0 20px 40px rgba(0, 255, 136, 0.25); }
+    .card-img-wrap { position: relative; height: 180px; overflow: hidden; }
+    .card-3d img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+    .card-3d:hover img { transform: scale(1.1); }
+    .card-tag { position: absolute; top: 12px; left: 12px; background: rgba(5, 10, 20, 0.85); color: var(--primary); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; border: 1px solid var(--primary); backdrop-filter: blur(5px); }
     
-    .card-body { padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .card h3 { color: var(--primary); font-size: 19px; margin-bottom: 8px; }
-    .card p { color: #999; font-size: 13px; line-height: 1.5; margin-bottom: 12px; }
+    .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-3d h3 { color: var(--primary); font-size: 20px; margin-bottom: 8px; font-weight: 800; }
+    .card-3d p { color: #aaa; font-size: 13.5px; line-height: 1.5; margin-bottom: 15px; }
 
-    .card-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid #222; font-size: 12px; color: #777; margin-bottom: 15px; }
+    .card-meta { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: #777; margin-bottom: 15px; font-weight: bold; }
 
-    .card-actions { display: flex; gap: 8px; }
-    .card-actions button { flex: 1; font-size: 13px; padding: 10px 5px; }
-    .btn-share { background: #1a1a1a; color: white; border: 1px solid #333; border-radius: 8px; cursor: pointer; font-weight: bold; }
-    .btn-share:hover { border-color: var(--primary); color: var(--primary); }
+    .card-actions { display: flex; gap: 10px; }
+    .card-actions button { flex: 1; font-size: 13px; padding: 10px; border-radius: 8px; }
+    .btn-share { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; font-weight: bold; transition: 0.3s; }
+    .btn-share:hover { border-color: var(--primary); color: var(--primary); background: rgba(0,255,136,0.1); }
 
     /* Toast Notification */
     #toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
-    .toast { background: #111; border-left: 4px solid var(--primary); color: white; padding: 12px 18px; border-radius: 8px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.8); font-size: 14px; animation: slideIn 0.3s ease forwards; }
+    .toast { background: rgba(10, 20, 30, 0.95); border-left: 4px solid var(--primary); color: white; padding: 14px 20px; border-radius: 10px; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.8); font-size: 14px; backdrop-filter: blur(10px); animation: slideIn 0.3s forwards; }
 
     /* Footer */
-    footer { border-top: 1px solid #222; padding: 40px 20px; text-align: center; background: #080808; margin-top: 40px; }
-    .social-links { display: flex; justify-content: center; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-    .social-links a { color: white; text-decoration: none; background: #151515; padding: 10px 18px; border-radius: 8px; border: 1px solid #333; transition: 0.3s; font-size: 14px; font-weight: bold; }
-    .social-links a:hover { background: var(--primary); color: black; border-color: var(--primary); }
+    footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 50px 20px; text-align: center; background: rgba(3, 5, 8, 0.95); margin-top: 50px; }
+    .social-links { display: flex; justify-content: center; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
+    .social-links a { color: white; text-decoration: none; background: rgba(255,255,255,0.05); padding: 12px 24px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; font-size: 14px; font-weight: bold; }
+    .social-links a:hover { background: var(--primary); color: black; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); transform: translateY(-3px); }
 
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
   </style>
 </head>
 <body>
 
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
   <div id="toast-container"></div>
 
   <!-- Header -->
   <header>
     <div class="logo">MARD 🎮</div>
-    <div class="nav-actions">
-      <button class="theme-btn" id="theme-toggle">🎨 Theme</button>
-      <button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
-    </div>
+    <button class="menu-btn" onclick="toggleMenu()">☰ Menu</button>
   </header>
 
-  <!-- Slide Navigation Drawer -->
+  <!-- Working Slide Navigation Drawer -->
   <div class="side-nav" id="side-drawer">
     <span class="close-nav" onclick="toggleMenu()">✖</span>
-    <h3 style="color:var(--primary); margin-bottom:10px;">Navigation</h3>
-    <a href="#" onclick="toggleMenu(); scrollToSection('hero-section');">🏠 Home</a>
-    <a href="#games-section" onclick="toggleMenu(); filterCards('mod', document.querySelectorAll('.filter-btn')[1]);">⛏ Mods</a>
-    <a href="#games-section" onclick="toggleMenu(); filterCards('map', document.querySelectorAll('.filter-btn')[2]);">🌍 Maps</a>
-    <a href="#games-section" onclick="toggleMenu(); filterCards('shader', document.querySelectorAll('.filter-btn')[3]);">✨ Shaders</a>
-    <a href="https://youtube.com/@mysterious_mard?si=J5nG1Zf8jWFRMC8e" target="_blank">📺 YouTube Channel</a>
+    <h3>Menu Navigation</h3>
+    <a href="#hero-section" onclick="toggleMenu();">🏠 Home Portal</a>
+    <a href="#games-section" onclick="toggleMenu(); filterCards('mod', document.querySelectorAll('.filter-btn')[1]);">⛏ Mods Zone</a>
+    <a href="#games-section" onclick="toggleMenu(); filterCards('map', document.querySelectorAll('.filter-btn')[2]);">🌍 Adventure Maps</a>
+    <a href="#games-section" onclick="toggleMenu(); filterCards('shader', document.querySelectorAll('.filter-btn')[3]);">✨ Realistic Shaders</a>
+    <a href="https://discord.com" target="_blank">🎮 Join Discord Server</a>
+    <a href="https://www.youtube.com/@mysterious_mard" target="_blank">📺 Official YouTube</a>
   </div>
 
-  <!-- Hero Section -->
+  <!-- 3D Hero Section -->
   <div class="hero" id="hero-section">
-    <div>
+    <div class="hero-card">
       <h1>MARD <span>GAMING</span> HUB</h1>
-      <p>Download Official Mods, Survival Maps & High FPS Shaders</p>
-      <button class="btn-main" onclick="scrollToSection('games-section')">Browse Content</button>
+      <p>Download Official Minecraft Mods, Custom Survival Maps & High FPS Ultra Shaders</p>
+      <button class="btn-3d" onclick="scrollToSection('games-section')">Explore Downloads</button>
     </div>
   </div>
 
   <!-- Filter & Content Section -->
   <section id="games-section">
-    <h2>Downloads Portal</h2>
+    <h2>3D Gaming Downloads</h2>
 
-    <!-- Dynamic Filter Buttons -->
+    <!-- Category Filters -->
     <div class="filter-container">
-      <button class="filter-btn active" onclick="filterCards('all', this)">🔥 All Items</button>
+      <button class="filter-btn active" onclick="filterCards('all', this)">🔥 All Files</button>
       <button class="filter-btn" onclick="filterCards('mod', this)">⛏ Mods</button>
       <button class="filter-btn" onclick="filterCards('map', this)">🌍 Maps</button>
       <button class="filter-btn" onclick="filterCards('shader', this)">✨ Shaders</button>
@@ -142,7 +144,7 @@
     <div class="grid-container" id="cards-wrapper">
       
       <!-- Card 1 (Mod) -->
-      <div class="card" data-category="mod">
+      <div class="card-3d" data-category="mod">
         <div class="card-img-wrap">
           <span class="card-tag">MOD (1.20+)</span>
           <img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025" alt="Mod">
@@ -155,15 +157,15 @@
             <span>📥 12.4K DLs</span>
           </div>
           <div class="card-actions">
-            <!-- APNA MEDIAFIRE DOWNLOAD LINK YAHAN REPLACE KAR SAKTE HO -->
-            <button class="btn-main" onclick="downloadItem('Survival Boost Mod', 'https://www.mediafire.com/')">Download</button>
+            <!-- PASTE YOUR MEDIAFIRE DOWNLOAD LINK HERE -->
+            <button class="btn-3d" onclick="downloadItem('Survival Boost Mod', 'https://www.mediafire.com/')">Download</button>
             <button class="btn-share" onclick="copyLink()">Share</button>
           </div>
         </div>
       </div>
 
       <!-- Card 2 (Map) -->
-      <div class="card" data-category="map">
+      <div class="card-3d" data-category="map">
         <div class="card-img-wrap">
           <span class="card-tag">MAP</span>
           <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8" alt="Map">
@@ -176,15 +178,15 @@
             <span>📥 8.9K DLs</span>
           </div>
           <div class="card-actions">
-            <!-- APNA MEDIAFIRE DOWNLOAD LINK YAHAN REPLACE KAR SAKTE HO -->
-            <button class="btn-main" onclick="downloadItem('Hardcore Survival Map', 'https://www.mediafire.com/')">Download</button>
+            <!-- PASTE YOUR MEDIAFIRE DOWNLOAD LINK HERE -->
+            <button class="btn-3d" onclick="downloadItem('Hardcore Survival Map', 'https://www.mediafire.com/')">Download</button>
             <button class="btn-share" onclick="copyLink()">Share</button>
           </div>
         </div>
       </div>
 
       <!-- Card 3 (Shader) -->
-      <div class="card" data-category="shader">
+      <div class="card-3d" data-category="shader">
         <div class="card-img-wrap">
           <span class="card-tag">SHADER</span>
           <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e" alt="Shader">
@@ -197,8 +199,8 @@
             <span>📥 25.1K DLs</span>
           </div>
           <div class="card-actions">
-            <!-- APNA MEDIAFIRE DOWNLOAD LINK YAHAN REPLACE KAR SAKTE HO -->
-            <button class="btn-main" onclick="downloadItem('Ultra RTX Shader', 'https://www.mediafire.com/')">Download</button>
+            <!-- PASTE YOUR MEDIAFIRE DOWNLOAD LINK HERE -->
+            <button class="btn-3d" onclick="downloadItem('Ultra RTX Shader', 'https://www.mediafire.com/')">Download</button>
             <button class="btn-share" onclick="copyLink()">Share</button>
           </div>
         </div>
@@ -209,18 +211,18 @@
 
   <!-- Footer -->
   <footer>
-    <h2 style="color:var(--primary); font-size: 24px;">MARD GAMING HUB</h2>
+    <h2 style="color:var(--primary); font-size: 26px; font-weight: 900;">MARD GAMING HUB</h2>
     <p style="color:#666; margin-top: 5px;">Created for true Minecraft Gamers</p>
 
     <div class="social-links">
-      <!-- TERA ASLI YOUTUBE CHANNEL LINK -->
-      <a href="https://youtube.com/@mysterious_mard?si=J5nG1Zf8jWFRMC8e" target="_blank">📺 YouTube Channel</a>
+      <!-- WORKING YOUTUBE CHANNEL LINK -->
+      <a href="https://www.youtube.com/@mysterious_mard" target="_blank">📺 YouTube Channel</a>
       <a href="https://discord.com" target="_blank">🎮 Discord Server</a>
     </div>
   </footer>
 
   <script>
-    // --- Toast Popup Message ---
+    // Toast Notification System
     function showToast(msg) {
       const container = document.getElementById("toast-container");
       const toast = document.createElement("div");
@@ -230,25 +232,25 @@
       setTimeout(() => toast.remove(), 3000);
     }
 
-    // --- Side Drawer Navigation ---
+    // Toggle Navigation Menu
     function toggleMenu() {
       const drawer = document.getElementById("side-drawer");
       drawer.classList.toggle("active");
     }
 
-    // --- Smooth Scroll ---
+    // Smooth Scroll
     function scrollToSection(id) {
       document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
     }
 
-    // --- Category Filter Logic ---
+    // Category Filter Logic
     function filterCards(category, btn) {
       if(btn) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
       }
 
-      const cards = document.querySelectorAll('.card');
+      const cards = document.querySelectorAll('.card-3d');
       cards.forEach(card => {
         if (category === 'all' || card.dataset.category === category) {
           card.style.display = 'flex';
@@ -256,27 +258,21 @@
           card.style.display = 'none';
         }
       });
-      showToast(`Showing ${category.toUpperCase()} content`);
+      showToast(`Showing ${category.toUpperCase()} category`);
     }
 
-    // --- Theme Switcher ---
-    document.getElementById("theme-toggle").addEventListener("click", () => {
-      document.body.classList.toggle("alt-theme");
-      showToast("Color Theme Changed!");
-    });
-
-    // --- Share / Copy Website Link ---
+    // Share / Copy Link
     function copyLink() {
       navigator.clipboard.writeText(window.location.href);
-      showToast("Website Link Copied to Clipboard!");
+      showToast("Link Copied to Clipboard!");
     }
 
-    // --- Download Handler ---
+    // Download Handler
     function downloadItem(name, link) {
-      showToast(`Redirecting to ${name} MediaFire Link...`);
+      showToast(`Opening ${name} Download Link...`);
       setTimeout(() => {
         window.open(link, "_blank");
-      }, 1000);
+      }, 800);
     }
   </script>
 </body>
