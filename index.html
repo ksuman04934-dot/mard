@@ -107,7 +107,8 @@
     .link-item-btn { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,136,0.3); padding: 14px 18px; border-radius: 12px; color: #fff; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; }
     .link-item-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
 
-    .ad-banner-box { background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(0,255,136,0.4); padding: 20px; margin: 15px 0; border-radius: 14px; color: #888; font-size: 12px; }
+    /* Updated Ad Banner Styling */
+    .ad-banner-box { background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(0,255,136,0.4); padding: 15px; margin: 15px 0; border-radius: 14px; color: #888; font-size: 12px; min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
     .timer-circle { font-size: 34px; font-weight: 900; color: var(--accent); margin: 10px 0; }
 
     /* Toast Notification */
@@ -182,15 +183,22 @@
     </div>
   </div>
 
-  <!-- 2. AD-GATE TIMER POPUP -->
+  <!-- 2. AD-GATE TIMER POPUP (UPDATED WITH REAL AD INTEGRATION PLACEHOLDER) -->
   <div class="modal-overlay" id="adModal">
     <div class="modal-card">
       <h3>VERIFYING FILE ACCESS</h3>
       <p style="color:#aaa; font-size:12px;">Generating high-speed download link...</p>
       
+      <!-- AD CONTAINER -->
       <div class="ad-banner-box">
+        <!-- 🟢 PASTE YOUR AD NETWORK CODE (AdSense / Adsterra / Monetag Script) HERE -->
         📢 ADVERTISEMENT BANNER PLACEHOLDER<br>
-        <span style="font-size:10px; color:#666;">(Paste Monetization Code Here)</span>
+        <span style="font-size:10px; color:#666; margin-top: 5px;">(Paste Monetization / Banner Script Code Here)</span>
+        <!-- Example Script Integration:
+        <script type="text/javascript">
+            // your_ad_script_here
+        </script>
+        -->
       </div>
 
       <div class="timer-circle" id="timerCount">10</div>
@@ -207,7 +215,7 @@
 
   <script>
     /* =========================================================================
-       📌 REAL MINECRAFT IMAGES UPDATED BELOW
+       📌 REAL MINECRAFT IMAGES & DOWNLOAD DATA
        ========================================================================= */
     const downloadData = [
       {
@@ -218,7 +226,6 @@
         size: "15.2 MB",
         downloads: "12.4K",
         desc: "Hardcore mechanics overhaul with custom armor & stamina meters.",
-        // Minecraft Dirt Block / Crafting HD Photo
         img: "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=600&q=80",
         links: [
           { name: "⚡ MediaFire Link", url: "https://www.mediafire.com" },
@@ -234,7 +241,6 @@
         size: "42.0 MB",
         downloads: "8.9K",
         desc: "Massive medieval RPG castle world with custom boss battles.",
-        // Minecraft Castle World Photo
         img: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80",
         links: [
           { name: "⚡ Direct Server 1", url: "https://www.mediafire.com" },
@@ -249,7 +255,6 @@
         size: "8.5 MB",
         downloads: "25.1K",
         desc: "Ultra Realistic lighting, raytracing water physics with high FPS.",
-        // Minecraft Realistic Glowing Shaders Photo
         img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
         links: [
           { name: "⚡ Fast Download (MediaFire)", url: "https://www.mediafire.com" }
@@ -263,7 +268,6 @@
         size: "22.1 MB",
         downloads: "18.3K",
         desc: "Epic mythical dragons, legendary swords, and elemental magic spells.",
-        // Minecraft Pixel Fantasy Sword / Dragon Vibe Photo
         img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
         links: [
           { name: "⚡ Main Server (MediaFire)", url: "https://www.mediafire.com" },
@@ -273,6 +277,10 @@
     ];
 
     let targetDownloadUrl = "";
+
+    // 🟢 MONETIZATION: DIRECT LINK / POPUNDER AD CONFIGURATION
+    // Apna Direct Link Ad URL yahan paste karein (e.g., Adsterra Direct Link / Monetag Smartlink)
+    const DIRECT_LINK_AD_URL = "YOUR_DIRECT_LINK_AD_URL_HERE"; 
 
     // --- Render Cards dynamically ---
     function renderCards(items) {
@@ -395,12 +403,20 @@
       }, 1000);
     }
 
+    // --- Proceed Download & Trigger Direct Link Ad ---
     function proceedDownload() {
       closeModal("adModal");
       showToast("Opening Direct Download Link...");
+
+      // 🟢 Step 1: Open Direct Link Ad in a new tab (if URL provided)
+      if (DIRECT_LINK_AD_URL && DIRECT_LINK_AD_URL !== "YOUR_DIRECT_LINK_AD_URL_HERE") {
+        window.open(DIRECT_LINK_AD_URL, '_blank');
+      }
+
+      // 🟢 Step 2: Open actual download link after short delay
       setTimeout(() => {
         window.open(targetDownloadUrl, '_blank');
-      }, 300);
+      }, 400);
     }
 
     function closeModal(id) {
