@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MARD Minecraft Gaming Hub - Mods, Maps, Texture Packs and Gaming Content">
+  <meta name="theme-color" content="#00ff88">
+  <meta name="keywords" content="Minecraft Mods, Minecraft Maps, Texture Packs, Shaders, Gaming">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="MARD Gaming">
+  
+  <meta property="og:title" content="MARD | Minecraft Gaming Hub">
+  <meta property="og:description" content="Download Minecraft Mods, Maps, Texture Packs and Gaming Content">
+  <meta property="og:type" content="website">
+
+  <title>MARD | Minecraft Gaming Hub</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/5968/5968267.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #050505;
+      color: white;
+      animation: pageLoad 0.8s ease;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(10, 10, 10, 0.85);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #00ff88;
+      letter-spacing: 2px;
+    }
+
+    .menu {
+      color: white;
+      cursor: pointer;
+      font-size: 24px;
+      background: #151515;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #222;
+      transition: 0.3s;
+    }
+
+    .menu:hover {
+      color: #00ff88;
+    }
+
+    /* Search Box */
+    .search-box {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+    }
+
+    .search-box input {
+      width: 60%;
+      max-width: 400px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #222;
+      background: #111;
+      color: white;
+      outline: none;
+    }
+
+    /* Categories */
+    .categories {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .categories h2 {
+      font-size: 30px;
+      margin-bottom: 25px;
+      color: white;
+    }
+
+    .category-box {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .category-box div {
+      background: #111;
+      width: 150px;
+      padding: 25px 10px;
+      border-radius: 15px;
+      font-size: 18px;
+      border: 1px solid #222;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
+        url("https://images.unsplash.com/photo-1607988795691-3d0147b43231");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background: #00ff88;
+      filter: blur(120px);
+      opacity: 0.2;
+    }
+
+    .hero div {
+      position: relative;
+      z-index: 1;
+      animation: show 1.2s ease;
+    }
+
+    .hero h1 {
+      font-size: 45px;
+      text-shadow: 0 0 20px #00ff88;
+    }
+
+    .hero h1 span {
+      color: #00ff88;
+    }
+
+    .hero p {
+      color: #aaa;
+      margin: 15px 0;
+      font-size: 18px;
+    }
+
+    /* Buttons */
+    button {
+      background: #00ff88;
+      color: #000;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00ff88;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    .hero button:hover {
+      background: white;
+      color: black;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .features h2 {
+      font-size: 32px;
+      margin-bottom: 25px;
+    }
+
+    .boxes {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      width: 280px;
+      background: #111;
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid #222;
+    }
+
+    .box img, .show-card img, .download-card img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      transition: 0.4s ease;
+    }
+
+    .box h3 {
+      color: #00ff88;
+      margin-bottom: 10px;
+    }
+
+    .box p {
+      color: #aaa;
+    }
+
+    /* Downloads Section */
+    .downloads {
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .downloads h2 {
+      font-size: 32px;
+      margin-bottom: 25px;
+    }
+
+    .download-box {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .download-card {
+      background: #151515;
+      width: 280px;
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid #222;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download-card::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      background: #00ff88;
+      top: 0;
+      left: 0;
+    }
+
+    .download-card h3 {
+      color: #00ff88;
+      margin-bottom: 10px;
+    }
+
+    .download-card p {
+      color: #aaa;
+      margin-bottom: 15px;
+    }
+
+    .download-card button {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* Showcase Section */
+    .showcase {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .showcase h2 {
+      font-size: 30px;
+      margin-bottom: 25px;
+    }
+
+    .showcase-box {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .show-card {
+      background: #111;
+      width: 280px;
+      padding: 25px;
+      border-radius: 15px;
+      border: 1px solid #222;
+    }
+
+    .show-card h3 {
+      color: #00ff88;
+      margin-bottom: 10px;
+    }
+
+    .show-card p {
+      color: #aaa;
+      margin-bottom: 15px;
+    }
+
+    /* Hover Animations for Cards */
+    .box, .download-card, .show-card, .category-box div {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: 0.5s ease;
+    }
+
+    .box:hover, .show-card:hover, .download-card:hover, .category-box div:hover {
+      transform: translateY(-10px) scale(1.03) !important;
+      border-color: #00ff88;
+      box-shadow: 0 0 25px rgba(0, 255, 136, 0.35);
+    }
+
+    .box:hover img, .show-card:hover img, .download-card:hover img {
+      transform: scale(1.08);
+    }
+
+    /* About & Contact */
+    .about {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .contact {
+      text-align: center;
+      padding: 50px 20px;
+      background: #0b0b0b;
+    }
+
+    .contact h2 {
+      color: #00ff88;
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+
+    .contact p {
+      color: #aaa;
+      margin-bottom: 20px;
+    }
+
+    .links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    .links a {
+      color: white;
+      text-decoration: none;
+      background: #151515;
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: 1px solid #222;
+      transition: 0.3s;
+    }
+
+    .links a:hover {
+      color: #00ff88;
+      border-color: #00ff88;
+      transform: translateY(-5px);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid #222;
+      background: #080808;
+      padding: 35px 20px;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    footer h2 {
+      color: #00ff88;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    footer p {
+      color: #aaa;
+    }
+
+    footer .social {
+      margin: 15px 0;
+      color: white;
+      font-size: 16px;
+      word-spacing: 10px;
+    }
+
+    footer:hover h2 {
+      text-shadow: 0 0 15px #00ff88;
+    }
+
+    .copy {
+      font-size: 14px;
+    }
+
+    /* AI Chat Widget CSS */
+    #ai-chat-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #00ff88;
+      color: #000;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 26px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+      transition: 0.3s;
+      z-index: 999;
+    }
+
+    #ai-chat-btn:hover {
+      transform: scale(1.1);
+    }
+
+    #ai-chat-box {
+      position: fixed;
+      bottom: 90px;
+      right: 25px;
+      width: 330px;
+      height: 420px;
+      background: #111;
+      border: 1px solid #00ff88;
+      border-radius: 15px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    .ai-header {
+      background: #181818;
+      padding: 12px 15px;
+      color: #00ff88;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #222;
+    }
+
+    .ai-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ai-msg {
+      max-width: 80%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .ai-msg.bot {
+      background: #1e1e1e;
+      color: #fff;
+      align-self: flex-start;
+      border-left: 3px solid #00ff88;
+    }
+
+    .ai-msg.user {
+      background: #00ff88;
+      color: #000;
+      align-self: flex-end;
+      font-weight: bold;
+    }
+
+    .ai-input-area {
+      display: flex;
+      padding: 10px;
+      background: #181818;
+      gap: 8px;
+    }
+
+    .ai-input-area input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: #050505;
+      color: white;
+      outline: none;
+    }
+
+    .ai-input-area button {
+      padding: 8px 15px;
+      font-size: 13px;
+      border-radius: 6px;
+    }
+
+    /* Keyframe Animations */
+    @keyframes show {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pageLoad {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Mobile Responsive Design */
+    @media(max-width: 600px) {
+      header { padding: 15px; }
+      .logo { font-size: 22px; }
+      .hero { min-height: 70vh; padding: 15px; }
+      .hero h1 { font-size: 32px; }
+      .hero p { font-size: 15px; }
+      .hero button { width: 90%; max-width: 300px; }
+      .box, .download-card, .show-card { width: 100%; max-width: 330px; }
+      .features, .downloads { padding: 30px 15px; }
+      .features h2, .downloads h2 { font-size: 26px; }
+      button { padding: 12px 25px; }
+      .search-box { flex-direction: column; align-items: center; }
+      .search-box input { width: 90%; font-size: 16px; }
+      .category-box div { width: 130px; }
+      #ai-chat-box { width: 90%; right: 5%; bottom: 85px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">MARD 🎮</div>
+    <div class="menu">☰</div>
+  </header>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" placeholder="Search Mods, Maps, Packs...">
+    <button id="search-btn">Search</button>
+  </div>
+
+  <!-- Categories -->
+  <section class="categories">
+    <h2>Categories</h2>
+    <div class="category-box">
+      <div>🎮<br>Minecraft</div>
+      <div>⚔️<br>Survival</div>
+      <div>🏰<br>Adventure</div>
+      <div>🔥<br>Shaders</div>
+    </div>
+  </section>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div>
+      <h1>Welcome To <span>MARD</span></h1>
+      <p>Minecraft Mods • Maps • Gaming</p>
+      <button id="explore-btn">Explore Now</button>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2>Our Gaming Zone</h2>
+    <div class="boxes">
+      <div class="box">
+        <img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025" alt="Minecraft Mods">
+        <h3>⛏ Mods</h3>
+        <p>Latest Minecraft mods aur addons.</p>
+      </div>
+      <div class="box">
+        <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8" alt="Gaming Map">
+        <h3>🌍 Maps</h3>
+        <p>Adventure aur survival maps.</p>
+      </div>
+      <div class="box">
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e" alt="Texture Pack">
+        <h3>🎨 Packs</h3>
+        <p>Texture packs aur shaders.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Downloads Section -->
+  <section class="downloads">
+    <h2>Latest Downloads</h2>
+    <div class="download-box">
+      <div class="download-card">
+        <h3>🔥 Survival World</h3>
+        <p>Explore new Minecraft adventures.</p>
+        <button class="download-btn">Download</button>
+      </div>
+      <div class="download-card">
+        <h3>⚔️ PvP Pack</h3>
+        <p>Improve your Minecraft gameplay.</p>
+        <button class="download-btn">Download</button>
+      </div>
+      <div class="download-card">
+        <h3>🏰 Adventure Map</h3>
+        <p>New worlds waiting for you.</p>
+        <button class="download-btn">Download</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase Section -->
+  <section class="showcase">
+    <h2>Featured Content</h2>
+    <div class="showcase-box">
+      <div class="show-card">
+        <h3>🔥 Best Mods</h3>
+        <p>Discover amazing Minecraft mods and addons.</p>
+        <button>Explore</button>
+      </div>
+      <div class="show-card">
+        <h3>🌎 New Maps</h3>
+        <p>Find exciting worlds for your gameplay.</p>
+        <button>Explore</button>
+      </div>
+      <div class="show-card">
+        <h3>✨ Texture Packs</h3>
+        <p>Upgrade your Minecraft visuals.</p>
+        <button>Explore</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about">
+    <h2>About MARD</h2>
+    <p>MARD is a Minecraft gaming hub where you can find mods, maps, texture packs and gaming content.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <h2>MARD 🎮</h2>
+    <p>Minecraft Gaming Hub</p>
+    <div class="social">YouTube • Discord • Instagram</div>
+    
+    <section class="contact">
+      <h2>Join MARD Community</h2>
+      <p>Stay updated with new Minecraft content.</p>
+      <button id="join-btn">Join Now</button>
+      <div class="links">
+        <a href="#">YouTube</a>
+        <a href="#">Discord</a>
+        <a href="#">Instagram</a>
+      </div>
+    </section>
+
+    <p class="copy">© 2026 MARD. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Floating AI Chatbot -->
+  <div id="ai-chat-btn" title="Ask MARD AI">🤖</div>
+
+  <div id="ai-chat-box">
+    <div class="ai-header">
+      <span>MARD Gaming AI 🤖</span>
+      <span id="close-ai" style="cursor:pointer;">✖</span>
+    </div>
+    <div class="ai-messages" id="ai-messages">
+      <div class="ai-msg bot">Hey Gamer! 🎮 Main MARD AI hu. Minecraft Mods, Shaders ya Recipes ke baare me kuch bhi poocho!</div>
+    </div>
+    <div class="ai-input-area">
+      <input type="text" id="ai-input" placeholder="Ask AI (e.g. Best Shaders, Mods)...">
+      <button id="ai-send-btn">Send</button>
+    </div>
+  </div>
+
+  <!-- JavaScript Code -->
+  <script>
+    // Search Functionality
+    const searchBtn = document.getElementById("search-btn");
+    const searchInput = document.querySelector(".search-box input");
+
+    function performSearch() {
+      let text = searchInput.value.toLowerCase().trim();
+      if (text === "") {
+        alert("Please search something!");
+        return;
+      }
+
+      let items = document.querySelectorAll(".box, .download-card, .category-box div");
+      let found = false;
+
+      items.forEach(function(item) {
+        item.style.borderColor = "#222";
+        if (item.innerText.toLowerCase().includes(text)) {
+          item.style.borderColor = "#00ff88";
+          if (!found) {
+            item.scrollIntoView({ behavior: "smooth", block: "center" });
+            found = true;
+          }
+        }
+      });
+    }
+
+    searchBtn.addEventListener("click", performSearch);
+    searchInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") performSearch();
+    });
+
+    // Menu Toggle
+    const menu = document.querySelector(".menu");
+    menu.addEventListener("click", function() {
+      menu.style.color = "#00ff88";
+      menu.innerHTML = (menu.innerHTML === "☰") ? "✖" : "☰";
+    });
+
+    // Hero Explore Button Scroll
+    const exploreBtn = document.getElementById("explore-btn");
+    exploreBtn.addEventListener("click", function() {
+      document.querySelector(".downloads").scrollIntoView({ behavior: "smooth" });
+    });
+
+    // Download Links Handlers
+    const downloadButtons = document.querySelectorAll(".download-btn");
+    const links = [
+      "https://example.com/survival-world",
+      "https://example.com/pvp-pack",
+      "https://example.com/adventure-map"
+    ];
+
+    downloadButtons.forEach(function(button, index) {
+      button.addEventListener("click", function(e) {
+        e.stopPropagation();
+        window.open(links[index], "_blank");
+      });
+    });
+
+    // Community Button
+    const joinBtn = document.getElementById("join-btn");
+    joinBtn.addEventListener("click", function() {
+      alert("Welcome to MARD Community 🎮");
+    });
+
+    // Scroll Reveal Effect
+    const revealItems = document.querySelectorAll(".box, .download-card, .show-card, .category-box div");
+    
+    function checkScroll() {
+      revealItems.forEach(function(item) {
+        let position = item.getBoundingClientRect().top;
+        if (position < window.innerHeight - 50) {
+          item.style.opacity = "1";
+          item.style.transform = "translateY(0)";
+        }
+      });
+    }
+
+    window.addEventListener("scroll", checkScroll);
+    window.addEventListener("load", function() {
+      checkScroll();
+      console.log("Welcome to MARD Gaming Hub 🎮");
+    });
+
+    // AI Chatbot Logic
+    const aiBtn = document.getElementById("ai-chat-btn");
+    const aiBox = document.getElementById("ai-chat-box");
+    const closeAi = document.getElementById("close-ai");
+    const aiInput = document.getElementById("ai-input");
+    const aiSendBtn = document.getElementById("ai-send-btn");
+    const aiMessages = document.getElementById("ai-messages");
+
+    aiBtn.addEventListener("click", () => {
+      aiBox.style.display = (aiBox.style.display === "flex") ? "none" : "flex";
+    });
+
+    closeAi.addEventListener("click", () => {
+      aiBox.style.display = "none";
+    });
+
+    function sendAiMessage() {
+      let userText = aiInput.value.trim();
+      if (userText === "") return;
+
+      let userMsgDiv = document.createElement("div");
+      userMsgDiv.className = "ai-msg user";
+      userMsgDiv.innerText = userText;
+      aiMessages.appendChild(userMsgDiv);
+
+      aiInput.value = "";
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+
+      setTimeout(() => {
+        let botMsgDiv = document.createElement("div");
+        botMsgDiv.className = "ai-msg bot";
+        botMsgDiv.innerText = getAiReply(userText.toLowerCase());
+        aiMessages.appendChild(botMsgDiv);
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+      }, 500);
+    }
+
+    aiSendBtn.addEventListener("click", sendAiMessage);
+    aiInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendAiMessage();
+    });
+
+    function getAiReply(text) {
+      if (text.includes("shader") || text.includes("graphics")) {
+        return "✨ Best Shaders for Minecraft: BSL Shaders, Complementary Reimagined, and OptiFine / Iris shaders support!";
+      } else if (text.includes("mod") || text.includes("addon")) {
+        return "⛏️ Popular Mods on MARD: OptiFine, Just Enough Items (JEI), WorldEdit, and Physics Mod!";
+      } else if (text.includes("download") || text.includes("link")) {
+        return "⬇️ Aap 'Latest Downloads' section me jaakar kisi bhi card par 'Download' button daba kar file download kar sakte ho!";
+      } else if (text.includes("hi") || text.includes("hello") || text.includes("hey")) {
+        return "Hey Gamer!⚡ Aaj konsa mod ya map try karna chahte ho?";
+      } else if (text.includes("pvp")) {
+        return "⚔️ PVP ke liye humara 'PvP Pack' download karo, isse FPS booster aur clean texture milta hai!";
+      } else {
+        return "🤖 Nice question! Minecraft Mods, Shader Packs aur Maps explore karne ke liye humare Downloads section me check karein!";
+      }
+    }
+  </script>
+</body>
+</html>
