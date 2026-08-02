@@ -3,95 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MARD | Ultra 3D Portal</title>
+  <title>MARD | Next-Gen Gaming Portal</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/5968/5968267.png">
 
   <style>
     :root {
       --primary: #00ff88;
-      --primary-glow: #00ff8888;
+      --primary-glow: #00ff88aa;
       --accent: #00e5ff;
-      --bg: #030712;
-      --glass: rgba(15, 23, 42, 0.65);
-      --glass-border: rgba(0, 255, 136, 0.25);
+      --accent-glow: #00e5ffaa;
+      --bg: #02040a;
+      --card-bg: rgba(10, 18, 35, 0.85);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg); color: #fff; overflow-x: hidden; min-height: 100vh; }
+    body { background: var(--bg); color: #fff; overflow-x: hidden; min-height: 100vh; position: relative; }
 
-    /* Canvas Background */
     #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
-    /* Glass Header */
-    header { display: flex; justify-content: space-between; align-items: center; padding: 18px 25px; position: sticky; top: 0; z-index: 100; background: rgba(3, 7, 18, 0.7); backdrop-filter: blur(16px); border-bottom: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-    .logo { font-size: 26px; font-weight: 900; color: var(--primary); letter-spacing: 2px; text-shadow: 0 0 15px var(--primary-glow); }
+    /* Header */
+    header { 
+      display: flex; justify-content: space-between; align-items: center; 
+      padding: 16px 28px; position: sticky; top: 0; z-index: 100; 
+      background: rgba(4, 8, 20, 0.85); backdrop-filter: blur(20px); 
+      border-bottom: 1px solid rgba(0, 255, 136, 0.25); 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
+    }
+    .logo { 
+      font-size: 28px; font-weight: 900; letter-spacing: 2px; 
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px var(--primary-glow));
+    }
     
-    .menu-btn { background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,229,255,0.2)); color: #fff; border: 1px solid var(--primary); padding: 10px 20px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px rgba(0,255,136,0.2); }
-    .menu-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 25px var(--primary-glow); }
+    .menu-btn { 
+      background: rgba(0, 255, 136, 0.1); color: var(--primary); 
+      border: 1px solid var(--primary); padding: 10px 22px; border-radius: 12px; 
+      font-weight: 800; cursor: pointer; transition: 0.3s ease; 
+    }
+    .menu-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 25px var(--primary-glow); transform: scale(1.05); }
 
-    /* Left Drawer Slide Menu (Swipe Activated) */
-    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 998; opacity: 0; pointer-events: none; transition: 0.4s; }
+    /* Navigation Drawer */
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 998; opacity: 0; pointer-events: none; transition: 0.4s; }
     .drawer-overlay.active { opacity: 1; pointer-events: auto; }
 
-    .side-drawer { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: rgba(10, 16, 30, 0.95); border-right: 1px solid var(--primary); z-index: 999; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 30px 20px; box-shadow: 10px 0 30px rgba(0,255,136,0.2); display: flex; flex-direction: column; gap: 20px; }
+    .side-drawer { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: rgba(6, 12, 26, 0.98); border-right: 2px solid var(--primary); z-index: 999; transition: 0.4s; padding: 35px 25px; display: flex; flex-direction: column; gap: 20px; }
     .side-drawer.active { left: 0; }
-    .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; }
-    .drawer-header h3 { color: var(--primary); font-size: 20px; font-weight: 800; }
-    .close-btn { font-size: 24px; cursor: pointer; color: #888; }
-    .close-btn:hover { color: var(--primary); }
+    .drawer-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,255,136,0.25); padding-bottom: 15px; }
+    .drawer-header h3 { color: var(--primary); font-size: 20px; font-weight: 900; }
+    .close-btn { font-size: 24px; cursor: pointer; color: #888; transition: 0.3s; }
 
     .drawer-menu { display: flex; flex-direction: column; gap: 12px; }
-    .drawer-menu a { color: #ccc; text-decoration: none; padding: 14px 18px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); font-weight: bold; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
+    .drawer-menu a { color: #ccc; text-decoration: none; padding: 14px 18px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); font-weight: bold; transition: 0.3s; }
     .drawer-menu a:hover { background: rgba(0,255,136,0.15); color: var(--primary); border-color: var(--primary); transform: translateX(8px); }
 
-    /* Hero Section */
-    .hero { min-height: 60vh; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px; perspective: 1000px; }
-    .hero-card { background: var(--glass); border: 1px solid var(--glass-border); padding: 40px 25px; border-radius: 24px; max-width: 650px; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,255,136,0.1); transform-style: preserve-3d; transition: transform 0.5s ease; }
-    .hero-card h1 { font-size: 42px; font-weight: 900; margin-bottom: 15px; text-shadow: 0 0 20px var(--primary-glow); }
-    .hero-card h1 span { color: var(--primary); }
-    .hero-card p { color: #94a3b8; font-size: 16px; margin-bottom: 25px; }
+    /* Hero & Search */
+    .hero { min-height: 38vh; display: flex; justify-content: center; align-items: center; text-align: center; padding: 30px 20px; }
+    .hero-card { background: var(--card-bg); border: 1px solid rgba(0, 255, 136, 0.3); padding: 40px 25px; border-radius: 28px; max-width: 750px; width: 100%; backdrop-filter: blur(20px); box-shadow: 0 30px 70px rgba(0,0,0,0.9); }
+    .hero-card h1 { font-size: 36px; font-weight: 900; margin-bottom: 12px; }
+    .hero-card h1 span { color: var(--primary); text-shadow: 0 0 20px var(--primary-glow); }
+    .hero-card p { color: #94a3b8; font-size: 15px; margin-bottom: 25px; }
 
-    /* REAL 3D Interactive Cards Setup */
-    .cards-section { padding: 40px 20px; text-align: center; }
-    .grid-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 1200px; margin: 30px auto 0; perspective: 1000px; }
+    .search-box { max-width: 500px; margin: 0 auto; position: relative; }
+    .search-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,136,0.4); padding: 16px 24px; border-radius: 30px; color: #fff; font-size: 16px; font-weight: 600; outline: none; transition: 0.3s; }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 25px var(--primary-glow); background: rgba(0,0,0,0.8); }
 
-    .card-3d-wrapper { perspective: 1000px; width: 320px; }
-    .card-3d { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; text-align: left; transition: transform 0.1s ease, box-shadow 0.3s ease; transform-style: preserve-3d; backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0,0,0,0.6); display: flex; flex-direction: column; }
-    .card-3d:hover { box-shadow: 0 20px 40px var(--primary-glow); border-color: var(--primary); }
+    /* Cards Grid */
+    .cards-section { padding: 20px; text-align: center; }
+    .grid-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 1200px; margin: 20px auto 0; perspective: 1200px; }
+
+    .card-4d-wrapper { width: 320px; perspective: 1000px; }
+    .card-4d { background: var(--card-bg); border: 1px solid rgba(0, 255, 136, 0.2); border-radius: 24px; overflow: hidden; text-align: left; transition: transform 0.15s ease-out, box-shadow 0.3s ease; transform-style: preserve-3d; backdrop-filter: blur(20px); box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: flex; flex-direction: column; }
+    .card-4d:hover { border-color: var(--primary); box-shadow: 0 25px 50px var(--primary-glow); }
 
     .card-img { height: 180px; position: relative; overflow: hidden; }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-    .card-3d:hover .card-img img { transform: scale(1.1); }
-    .card-tag { position: absolute; top: 12px; left: 12px; background: rgba(3, 7, 18, 0.85); color: var(--primary); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; border: 1px solid var(--primary); backdrop-filter: blur(5px); transform: translateZ(30px); }
-
-    .card-content { padding: 20px; transform: translateZ(20px); flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+    .card-4d:hover .card-img img { transform: scale(1.1); }
+    
+    .card-tag { position: absolute; top: 12px; left: 12px; background: rgba(3, 7, 18, 0.9); color: var(--primary); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 900; border: 1px solid var(--primary); }
+    .card-content { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
     .card-content h3 { color: var(--primary); font-size: 20px; margin-bottom: 8px; font-weight: 800; }
     .card-content p { color: #94a3b8; font-size: 13px; line-height: 1.5; margin-bottom: 15px; }
-
     .card-meta { display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 12px; color: #64748b; margin-bottom: 15px; font-weight: bold; }
 
-    /* Neon Buttons */
-    .btn-neon { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #000; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; width: 100%; box-shadow: 0 5px 15px var(--primary-glow); }
-    .btn-neon:hover { transform: translateY(-3px) translateZ(10px); box-shadow: 0 10px 25px var(--primary-glow); background: #fff; }
+    /* Buttons */
+    .btn-neon { background: linear-gradient(135deg, var(--primary), var(--accent)); color: #000; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; width: 100%; letter-spacing: 1px; box-shadow: 0 5px 20px var(--primary-glow); }
+    .btn-neon:hover { transform: scale(1.02); box-shadow: 0 10px 30px var(--primary-glow); background: #fff; }
 
     /* Filters */
-    .filter-box { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-    .filter-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #aaa; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-    .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+    .filter-box { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
+    .filter-btn { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #aaa; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 13px; }
+    .filter-btn.active, .filter-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
 
-    /* Toast */
-    #toast-box { position: fixed; top: 20px; right: 20px; z-index: 10000; }
-    .toast { background: rgba(10, 16, 30, 0.9); border-left: 4px solid var(--primary); color: #fff; padding: 12px 20px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+    /* Popups (Multi-Link & Timer Modal) */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.88); backdrop-filter: blur(18px); z-index: 10000; display: none; justify-content: center; align-items: center; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    
+    .modal-card { background: rgba(8, 14, 28, 0.98); border: 1px solid var(--primary); border-radius: 24px; width: 100%; max-width: 480px; padding: 25px; text-align: center; box-shadow: 0 0 50px var(--primary-glow); position: relative; }
+    .modal-card h3 { color: var(--primary); font-size: 22px; font-weight: 900; margin-bottom: 10px; }
 
-    footer { border-top: 1px solid var(--glass-border); padding: 40px 20px; text-align: center; margin-top: 50px; background: rgba(3,7,18,0.9); }
-    .socials { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-    .socials a { color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-weight: bold; transition: 0.3s; }
-    .socials a:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-3px); }
+    /* Multiple Links List Styling */
+    .links-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; max-height: 260px; overflow-y: auto; padding-right: 5px; }
+    .link-item-btn { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,255,136,0.3); padding: 14px 18px; border-radius: 12px; color: #fff; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; }
+    .link-item-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+
+    .ad-banner-box { background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(0,255,136,0.4); padding: 20px; margin: 15px 0; border-radius: 14px; color: #888; font-size: 12px; }
+    .timer-circle { font-size: 34px; font-weight: 900; color: var(--accent); margin: 10px 0; }
+
+    /* Toast Notification */
+    #toast-box { position: fixed; top: 25px; right: 25px; z-index: 10001; }
+    .toast { background: rgba(8, 14, 28, 0.95); border-left: 4px solid var(--primary); color: #fff; padding: 12px 20px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; }
+
+    footer { border-top: 1px solid rgba(0, 255, 136, 0.2); padding: 40px 20px; text-align: center; margin-top: 60px; background: rgba(3,7,18,0.95); }
   </style>
 </head>
 <body>
 
-  <!-- Particle Background Canvas -->
   <canvas id="bg-canvas"></canvas>
   <div id="toast-box"></div>
 
@@ -101,7 +128,7 @@
     <button class="menu-btn" onclick="toggleDrawer()">☰ Menu</button>
   </header>
 
-  <!-- Left Drawer Overlay & Side Nav (Swipe Activated) -->
+  <!-- Side Drawer Navigation -->
   <div class="drawer-overlay" id="overlay" onclick="toggleDrawer()"></div>
   <div class="side-drawer" id="drawer">
     <div class="drawer-header">
@@ -110,27 +137,29 @@
     </div>
     <div class="drawer-menu">
       <a href="#hero" onclick="toggleDrawer()">🏠 Home Portal</a>
-      <a href="#downloads" onclick="filterCards('mod', document.querySelectorAll('.filter-btn')[1]); toggleDrawer();">⛏ Mods Zone</a>
-      <a href="#downloads" onclick="filterCards('map', document.querySelectorAll('.filter-btn')[2]); toggleDrawer();">🌍 Adventure Maps</a>
-      <a href="#downloads" onclick="filterCards('shader', document.querySelectorAll('.filter-btn')[3]); toggleDrawer();">✨ RTX Shaders</a>
+      <a href="#downloads" onclick="filterCards('mod'); toggleDrawer();">⛏ Mods Zone</a>
+      <a href="#downloads" onclick="filterCards('map'); toggleDrawer();">🌍 Adventure Maps</a>
+      <a href="#downloads" onclick="filterCards('shader'); toggleDrawer();">✨ RTX Shaders</a>
       <a href="https://www.youtube.com/@mysterious_mard" target="_blank">📺 Official YouTube</a>
     </div>
   </div>
 
-  <!-- Hero Section -->
+  <!-- Hero & Live Search Section -->
   <div class="hero" id="hero">
-    <div class="hero-card" id="hero-card">
+    <div class="hero-card">
       <h1>MARD <span>GAMING</span> HUB</h1>
-      <p>Premium Minecraft Mods, Survival Maps & High FPS Shaders</p>
-      <button class="btn-neon" onclick="document.getElementById('downloads').scrollIntoView({behavior:'smooth'})">Explore Hub</button>
+      <p>Instant Search & Multi-Server Fast Downloads</p>
+      
+      <div class="search-box">
+        <input type="text" id="searchInput" class="search-input" placeholder="⚡ Type to search mods, maps, shaders..." onkeyup="searchItems()">
+      </div>
     </div>
   </div>
 
-  <!-- Downloads Section -->
+  <!-- Downloads Grid Section -->
   <section class="cards-section" id="downloads">
-    <h2 style="font-size: 32px; font-weight: 900; margin-bottom: 20px; text-shadow: 0 0 15px var(--primary-glow);">PREMIUM DOWNLOADS</h2>
+    <h2 style="font-size: 30px; font-weight: 900; margin-bottom: 20px;">PREMIUM DOWNLOADS</h2>
 
-    <!-- Filters -->
     <div class="filter-box">
       <button class="filter-btn active" onclick="filterCards('all', this)">🔥 All Items</button>
       <button class="filter-btn" onclick="filterCards('mod', this)">⛏ Mods</button>
@@ -138,71 +167,246 @@
       <button class="filter-btn" onclick="filterCards('shader', this)">✨ Shaders</button>
     </div>
 
-    <!-- 3D Cards Grid -->
-    <div class="grid-container">
-
-      <!-- Card 1 (Mod) -->
-      <div class="card-3d-wrapper" data-category="mod">
-        <div class="card-3d">
-          <div class="card-img">
-            <span class="card-tag">MOD 1.20+</span>
-            <img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025" alt="Mod">
-          </div>
-          <div class="card-content">
-            <h3>Survival Essentials</h3>
-            <p>Hardcore mechanics overhaul with new custom armor & stamina meters.</p>
-            <div class="card-meta"><span>💾 15.2 MB</span><span>📥 12.4K</span></div>
-            <button class="btn-neon" onclick="download('Survival Essentials', 'https://www.mediafire.com/')">Download Mod</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2 (Map) -->
-      <div class="card-3d-wrapper" data-category="map">
-        <div class="card-3d">
-          <div class="card-img">
-            <span class="card-tag">MAP</span>
-            <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8" alt="Map">
-          </div>
-          <div class="card-content">
-            <h3>Kingdom Conquest</h3>
-            <p>Massive medieval RPG world with custom boss battles and quest lines.</p>
-            <div class="card-meta"><span>💾 42.0 MB</span><span>📥 8.9K</span></div>
-            <button class="btn-neon" onclick="download('Kingdom Conquest', 'https://www.mediafire.com/')">Download Map</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 (Shader) -->
-      <div class="card-3d-wrapper" data-category="shader">
-        <div class="card-3d">
-          <div class="card-img">
-            <span class="card-tag">SHADER</span>
-            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e" alt="Shader">
-          </div>
-          <div class="card-content">
-            <h3>Ultra RTX Shader</h3>
-            <p>Ultra Realistic lighting, raytracing water physics with high FPS boost.</p>
-            <div class="card-meta"><span>💾 8.5 MB</span><span>📥 25.1K</span></div>
-            <button class="btn-neon" onclick="download('Ultra RTX Shader', 'https://www.mediafire.com/')">Download Shader</button>
-          </div>
-        </div>
-      </div>
-
-    </div>
+    <div class="grid-container" id="cardsGrid"></div>
   </section>
+
+  <!-- 1. MULTIPLE LINKS SELECTION POPUP -->
+  <div class="modal-overlay" id="linksModal">
+    <div class="modal-card">
+      <h3 id="modalTitle">Select Download Link</h3>
+      <p style="color:#aaa; font-size:12px;">Choose your preferred server link below:</p>
+      
+      <div class="links-list" id="linksContainer"></div>
+
+      <button class="filter-btn" style="width:100%; margin-top:5px;" onclick="closeModal('linksModal')">Close Window</button>
+    </div>
+  </div>
+
+  <!-- 2. AD-GATE TIMER POPUP -->
+  <div class="modal-overlay" id="adModal">
+    <div class="modal-card">
+      <h3>VERIFYING FILE ACCESS</h3>
+      <p style="color:#aaa; font-size:12px;">Generating high-speed download link...</p>
+      
+      <div class="ad-banner-box">
+        📢 ADVERTISEMENT BANNER PLACEHOLDER<br>
+        <span style="font-size:10px; color:#666;">(Paste Monetization Code Here)</span>
+      </div>
+
+      <div class="timer-circle" id="timerCount">10</div>
+
+      <button class="btn-neon" id="unlockBtn" style="opacity:0.5; cursor:not-allowed;" disabled onclick="proceedDownload()">Please Wait...</button>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>
-    <h2 style="color:var(--primary); font-weight:900;">MARD GAMING HUB</h2>
-    <div class="socials">
-      <a href="https://www.youtube.com/@mysterious_mard" target="_blank">📺 YouTube</a>
-      <a href="https://discord.com" target="_blank">🎮 Discord</a>
-    </div>
+    <h3 style="color:var(--primary); font-weight:900;">MARD GAMING HUB</h3>
+    <p style="color:#666; font-size:12px; margin-top:5px;">© 2026 MARD. All rights reserved.</p>
   </footer>
 
   <script>
-    // --- Toast Notification ---
+    /* =========================================================================
+       📌 REAL MINECRAFT IMAGES UPDATED BELOW
+       ========================================================================= */
+    const downloadData = [
+      {
+        id: 1,
+        title: "Survival Essentials Mod",
+        category: "mod",
+        tag: "MOD 1.20+",
+        size: "15.2 MB",
+        downloads: "12.4K",
+        desc: "Hardcore mechanics overhaul with custom armor & stamina meters.",
+        // Minecraft Dirt Block / Crafting HD Photo
+        img: "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=600&q=80",
+        links: [
+          { name: "⚡ MediaFire Link", url: "https://www.mediafire.com" },
+          { name: "☁️ Google Drive Link", url: "https://drive.google.com" },
+          { name: "🚀 Mega.nz Link", url: "https://mega.nz" }
+        ]
+      },
+      {
+        id: 2,
+        title: "Kingdom Conquest Map",
+        category: "map",
+        tag: "MAP",
+        size: "42.0 MB",
+        downloads: "8.9K",
+        desc: "Massive medieval RPG castle world with custom boss battles.",
+        // Minecraft Castle World Photo
+        img: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80",
+        links: [
+          { name: "⚡ Direct Server 1", url: "https://www.mediafire.com" },
+          { name: "☁️ Google Drive Mirror", url: "https://drive.google.com" }
+        ]
+      },
+      {
+        id: 3,
+        title: "Ultra RTX Shader 4K",
+        category: "shader",
+        tag: "SHADER",
+        size: "8.5 MB",
+        downloads: "25.1K",
+        desc: "Ultra Realistic lighting, raytracing water physics with high FPS.",
+        // Minecraft Realistic Glowing Shaders Photo
+        img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+        links: [
+          { name: "⚡ Fast Download (MediaFire)", url: "https://www.mediafire.com" }
+        ]
+      },
+      {
+        id: 4,
+        title: "Dragon Slayer Weapon Mod",
+        category: "mod",
+        tag: "MOD 1.20+",
+        size: "22.1 MB",
+        downloads: "18.3K",
+        desc: "Epic mythical dragons, legendary swords, and elemental magic spells.",
+        // Minecraft Pixel Fantasy Sword / Dragon Vibe Photo
+        img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+        links: [
+          { name: "⚡ Main Server (MediaFire)", url: "https://www.mediafire.com" },
+          { name: "☁️ Backup Server (Google Drive)", url: "https://drive.google.com" }
+        ]
+      }
+    ];
+
+    let targetDownloadUrl = "";
+
+    // --- Render Cards dynamically ---
+    function renderCards(items) {
+      const grid = document.getElementById("cardsGrid");
+      grid.innerHTML = "";
+
+      if(items.length === 0) {
+        grid.innerHTML = `<p style="color:#888; font-size:16px; width:100%; text-align:center;">❌ Koi file nahi mili!</p>`;
+        return;
+      }
+
+      items.forEach(item => {
+        const cardHTML = `
+          <div class="card-4d-wrapper">
+            <div class="card-4d">
+              <div class="card-img">
+                <span class="card-tag">${item.tag}</span>
+                <img src="${item.img}" alt="${item.title}">
+              </div>
+              <div class="card-content">
+                <h3>${item.title}</h3>
+                <p>${item.desc}</p>
+                <div class="card-meta">
+                  <span>💾 ${item.size}</span>
+                  <span>📥 ${item.downloads}</span>
+                </div>
+                <button class="btn-neon" onclick="openLinksModal(${item.id})">Get Links (${item.links.length})</button>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.innerHTML += cardHTML;
+      });
+
+      init4DTilt();
+    }
+
+    // Initial render
+    renderCards(downloadData);
+
+    // --- Live Instant Search Logic ---
+    function searchItems() {
+      const query = document.getElementById("searchInput").value.toLowerCase().trim();
+      const filtered = downloadData.filter(item => 
+        item.title.toLowerCase().includes(query) || 
+        item.desc.toLowerCase().includes(query) ||
+        item.category.toLowerCase().includes(query) ||
+        item.tag.toLowerCase().includes(query)
+      );
+      renderCards(filtered);
+    }
+
+    // --- Category Filter Logic ---
+    function filterCards(cat, btn) {
+      if(btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      document.getElementById("searchInput").value = "";
+      if(cat === 'all') {
+        renderCards(downloadData);
+      } else {
+        const filtered = downloadData.filter(item => item.category === cat);
+        renderCards(filtered);
+      }
+    }
+
+    // --- Open Links Selection Popup ---
+    function openLinksModal(id) {
+      const item = downloadData.find(i => i.id === id);
+      if(!item) return;
+
+      document.getElementById("modalTitle").innerText = item.title;
+      const container = document.getElementById("linksContainer");
+      container.innerHTML = "";
+
+      item.links.forEach(linkObj => {
+        const linkBtn = document.createElement("a");
+        linkBtn.className = "link-item-btn";
+        linkBtn.href = "#";
+        linkBtn.innerHTML = `<span>${linkObj.name}</span> <span>📥</span>`;
+        linkBtn.onclick = (e) => {
+          e.preventDefault();
+          closeModal('linksModal');
+          startAdGate(linkObj.url);
+        };
+        container.appendChild(linkBtn);
+      });
+
+      document.getElementById("linksModal").classList.add("active");
+    }
+
+    // --- Ad Gate / Timer Logic ---
+    function startAdGate(url) {
+      targetDownloadUrl = url;
+      const modal = document.getElementById("adModal");
+      const timerDisplay = document.getElementById("timerCount");
+      const btn = document.getElementById("unlockBtn");
+
+      modal.classList.add("active");
+      let timeLeft = 10;
+      timerDisplay.innerText = timeLeft;
+      btn.innerText = "Please Wait...";
+      btn.disabled = true;
+      btn.style.opacity = "0.5";
+      btn.style.cursor = "not-allowed";
+
+      let countdown = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(countdown);
+          timerDisplay.innerText = "READY! ✅";
+          btn.innerText = "DOWNLOAD NOW 🚀";
+          btn.disabled = false;
+          btn.style.opacity = "1";
+          btn.style.cursor = "pointer";
+        }
+      }, 1000);
+    }
+
+    function proceedDownload() {
+      closeModal("adModal");
+      showToast("Opening Direct Download Link...");
+      setTimeout(() => {
+        window.open(targetDownloadUrl, '_blank');
+      }, 300);
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("active");
+    }
+
     function showToast(msg) {
       const box = document.getElementById("toast-box");
       const t = document.createElement("div");
@@ -212,69 +416,27 @@
       setTimeout(() => t.remove(), 3000);
     }
 
-    // --- Side Drawer Open/Close ---
     function toggleDrawer() {
       document.getElementById("drawer").classList.toggle("active");
       document.getElementById("overlay").classList.toggle("active");
     }
 
-    // --- LEFT TO RIGHT SWIPE TO OPEN MENU (Touch Gesture) ---
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
-    document.addEventListener('touchend', e => {
-      touchEndX = e.changedTouches[0].screenX;
-      // Swipe Right from left edge opens menu
-      if (touchStartX < 50 && touchEndX - touchStartX > 80) {
-        document.getElementById("drawer").classList.add("active");
-        document.getElementById("overlay").classList.add("active");
-        showToast("Menu Swiped Open!");
-      }
-      // Swipe Left closes menu
-      if (touchStartX - touchEndX > 80) {
-        document.getElementById("drawer").classList.remove("active");
-        document.getElementById("overlay").classList.remove("active");
-      }
-    });
-
-    // --- REAL 3D TILT EFFECT ON CARDS ---
-    document.querySelectorAll('.card-3d-wrapper').forEach(wrapper => {
-      const card = wrapper.querySelector('.card-3d');
-      wrapper.addEventListener('mousemove', (e) => {
-        const rect = wrapper.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width/2;
-        const y = e.clientY - rect.top - rect.height/2;
-        card.style.transform = `rotateY(${x / 10}deg) rotateX(${-y / 10}deg) translateZ(10px)`;
+    // 4D Tilt Card Parallax Effect
+    function init4DTilt() {
+      document.querySelectorAll('.card-4d').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          card.style.transform = `rotateX(${(-y / rect.height) * 20}deg) rotateY(${(x / rect.width) * 20}deg)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
       });
-      wrapper.addEventListener('mouseleave', () => {
-        card.style.transform = 'rotateY(0deg) rotateX(0deg) translateZ(0px)';
-      });
-    });
-
-    // --- CATEGORY FILTER ---
-    function filterCards(cat, btn) {
-      if(btn) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-      document.querySelectorAll('.card-3d-wrapper').forEach(c => {
-        if(cat === 'all' || c.dataset.category === cat) {
-          c.style.display = 'block';
-        } else {
-          c.style.display = 'none';
-        }
-      });
-      showToast(`Filter: ${cat.toUpperCase()}`);
     }
 
-    // --- DOWNLOAD HANDLER ---
-    function download(name, link) {
-      showToast(`Redirecting to ${name}...`);
-      setTimeout(() => window.open(link, '_blank'), 1000);
-    }
-
-    // --- ANIMATED CANVAS PARTICLES ---
+    // Background Particle Canvas
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     let pts = [];
@@ -282,17 +444,17 @@
     window.addEventListener('resize', resize);
     resize();
 
-    for(let i=0; i<40; i++) {
-      pts.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, dx: (Math.random()-0.5)*0.8, dy: (Math.random()-0.5)*0.8 });
+    for(let i=0; i<50; i++) {
+      pts.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2, dx: (Math.random()-0.5)*0.5, dy: (Math.random()-0.5)*0.5 });
     }
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00ff8844';
       pts.forEach(p => {
         p.x += p.dx; p.y += p.dy;
         if(p.x < 0 || p.x > canvas.width) p.dx *= -1;
         if(p.y < 0 || p.y > canvas.height) p.dy *= -1;
+        ctx.fillStyle = "rgba(0, 255, 136, 0.3)";
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
       });
       requestAnimationFrame(animate);
