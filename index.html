@@ -17,561 +17,143 @@
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/5968/5968267.png">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
+    /* Custom Green Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #050505; }
+    ::-webkit-scrollbar-thumb { background: #00ff88; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #00cc6a; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body { background: #050505; color: white; overflow-x: hidden; }
+    img { max-width: 100%; height: auto; }
 
-    body {
-      background: #050505;
-      color: white;
-      animation: pageLoad 0.8s ease;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
+    /* Preloader */
+    #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #050505; display: flex; justify-content: center; align-items: center; z-index: 9999; flex-direction: column; transition: 0.5s; }
+    .loader { width: 50px; height: 50px; border: 5px solid #222; border-top: 5px solid #00ff88; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     /* Header */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-      background: rgba(10, 10, 10, 0.85);
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      color: #00ff88;
-      letter-spacing: 2px;
-    }
-
-    .menu {
-      color: white;
-      cursor: pointer;
-      font-size: 24px;
-      background: #151515;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid #222;
-      transition: 0.3s;
-    }
-
-    .menu:hover {
-      color: #00ff88;
-    }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 20px; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); background: rgba(10, 10, 10, 0.85); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5); border-bottom: 1px solid #00ff8833; }
+    .logo { font-size: 28px; font-weight: bold; color: #00ff88; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,255,136,0.5); }
+    .menu { color: white; cursor: pointer; font-size: 24px; background: #151515; padding: 8px 12px; border-radius: 8px; border: 1px solid #222; transition: 0.3s; }
+    .menu:hover { color: #00ff88; border-color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.3); }
 
     /* Search Box */
-    .search-box {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 20px;
-    }
-
-    .search-box input {
-      width: 60%;
-      max-width: 400px;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #222;
-      background: #111;
-      color: white;
-      outline: none;
-    }
-
-    /* Categories */
-    .categories {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .categories h2 {
-      font-size: 30px;
-      margin-bottom: 25px;
-      color: white;
-    }
-
-    .category-box {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .category-box div {
-      background: #111;
-      width: 150px;
-      padding: 25px 10px;
-      border-radius: 15px;
-      font-size: 18px;
-      border: 1px solid #222;
-      transition: 0.3s;
-      cursor: pointer;
-    }
+    .search-box { display: flex; justify-content: center; gap: 10px; padding: 25px 20px; background: linear-gradient(180deg, rgba(0,255,136,0.05) 0%, #050505 100%); }
+    .search-box input { width: 60%; max-width: 400px; padding: 12px 15px; border-radius: 8px; border: 1px solid #333; background: #111; color: white; outline: none; transition: 0.3s; }
+    .search-box input:focus { border-color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.2); }
 
     /* Hero Section */
-    .hero {
-      min-height: 85vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
-        url("https://images.unsplash.com/photo-1607988795691-3d0147b43231");
-      background-size: cover;
-      background-position: center;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 250px;
-      height: 250px;
-      background: #00ff88;
-      filter: blur(120px);
-      opacity: 0.2;
-    }
-
-    .hero div {
-      position: relative;
-      z-index: 1;
-      animation: show 1.2s ease;
-    }
-
-    .hero h1 {
-      font-size: 45px;
-      text-shadow: 0 0 20px #00ff88;
-    }
-
-    .hero h1 span {
-      color: #00ff88;
-    }
-
-    .hero p {
-      color: #aaa;
-      margin: 15px 0;
-      font-size: 18px;
-    }
+    .hero { min-height: 80vh; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px; position: relative; overflow: hidden; background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), url("https://images.unsplash.com/photo-1607988795691-3d0147b43231"); background-size: cover; background-position: center; border-bottom: 2px solid #111; }
+    .hero::before { content: ""; position: absolute; width: 300px; height: 300px; background: #00ff88; filter: blur(150px); opacity: 0.2; }
+    .hero div { position: relative; z-index: 1; animation: showUp 1.2s ease; }
+    .hero h1 { font-size: 50px; text-shadow: 0 0 20px #00ff88; margin-bottom: 10px; }
+    .hero h1 span { color: #00ff88; }
+    .hero p { color: #ccc; margin: 15px 0 25px; font-size: 18px; }
 
     /* Buttons */
-    button {
-      background: #00ff88;
-      color: #000;
-      border: none;
-      padding: 14px 30px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+    button { background: #00ff88; color: #000; border: none; padding: 14px 30px; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+    button:hover { transform: translateY(-3px); box-shadow: 0 5px 25px rgba(0, 255, 136, 0.6); background: white; color: black; }
+    button:active { transform: scale(0.95); }
 
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #00ff88;
-    }
+    /* Stats Section */
+    .stats { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; padding: 40px 20px; background: #0a0a0a; text-align: center; border-bottom: 1px solid #111; }
+    .stat-box { padding: 15px; }
+    .stat-box h3 { font-size: 35px; color: #00ff88; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+    .stat-box p { color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
 
-    button:active {
-      transform: scale(0.96);
-    }
+    /* General Section Styling */
+    section { padding: 60px 20px; text-align: center; }
+    section h2 { font-size: 32px; margin-bottom: 35px; display: inline-block; position: relative; }
+    section h2::after { content: ""; position: absolute; width: 50%; height: 3px; background: #00ff88; bottom: -10px; left: 25%; border-radius: 5px; }
 
-    .hero button:hover {
-      background: white;
-      color: black;
-    }
+    /* Cards Layout (Grid/Flex) */
+    .grid-container { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
+    
+    /* Category Cards */
+    .category-box div { background: #111; width: 140px; padding: 25px 10px; border-radius: 15px; font-size: 18px; border: 1px solid #222; transition: 0.3s; cursor: pointer; font-weight: bold; }
+    
+    /* Box & Download Cards */
+    .box, .download-card { background: #111; width: 300px; padding: 20px; border-radius: 15px; border: 1px solid #222; position: relative; overflow: hidden; text-align: left; transition: 0.4s ease; }
+    .download-card::before { content: ""; position: absolute; width: 100%; height: 3px; background: #00ff88; top: 0; left: 0; }
+    .box img { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; transition: 0.5s; }
+    .box h3, .download-card h3 { color: #00ff88; margin-bottom: 10px; font-size: 22px; }
+    .box p, .download-card p { color: #aaa; margin-bottom: 20px; font-size: 15px; line-height: 1.5; }
+    .download-card button { width: 100%; }
 
-    /* Features Section */
-    .features {
-      padding: 40px 20px;
-      text-align: center;
-    }
+    /* Hover Effects */
+    .box:hover, .download-card:hover, .category-box div:hover { transform: translateY(-10px); border-color: #00ff88; box-shadow: 0 10px 30px rgba(0, 255, 136, 0.15); }
+    .box:hover img { transform: scale(1.05); }
 
-    .features h2 {
-      font-size: 32px;
-      margin-bottom: 25px;
-    }
+    /* FAQ Section */
+    .faq-container { max-width: 700px; margin: 0 auto; text-align: left; }
+    .faq-item { background: #111; margin-bottom: 15px; border-radius: 10px; border: 1px solid #222; overflow: hidden; }
+    .faq-question { padding: 20px; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; color: white; transition: 0.3s; }
+    .faq-question:hover { color: #00ff88; background: #151515; }
+    .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; color: #aaa; line-height: 1.6; }
+    .faq-answer.active { padding: 0 20px 20px 20px; max-height: 200px; }
 
-    .boxes {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
+    /* Footer & Contact */
+    .contact { background: #0b0b0b; border-radius: 20px; padding: 40px 20px; max-width: 800px; margin: 0 auto 40px; border: 1px solid #222; }
+    .links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 25px; }
+    .links a { color: white; text-decoration: none; background: #151515; padding: 12px 25px; border-radius: 10px; border: 1px solid #333; transition: 0.3s; font-weight: bold; }
+    .links a:hover { color: #000; background: #00ff88; border-color: #00ff88; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,255,136,0.4); }
+    
+    footer { border-top: 1px solid #222; background: #050505; padding: 30px 20px; text-align: center; }
+    footer h2 { color: #00ff88; margin-bottom: 10px; letter-spacing: 2px; }
+    .copy { color: #666; font-size: 14px; margin-top: 15px; }
 
-    .box {
-      width: 280px;
-      background: #111;
-      padding: 25px;
-      border-radius: 15px;
-      border: 1px solid #222;
-    }
+    /* Floating Chat & Top Button */
+    #ai-chat-btn, #scroll-top-btn { position: fixed; right: 20px; background: #00ff88; color: #000; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 26px; cursor: pointer; box-shadow: 0 0 20px rgba(0, 255, 136, 0.4); transition: 0.3s; z-index: 999; }
+    #ai-chat-btn { bottom: 20px; }
+    #scroll-top-btn { bottom: 90px; display: none; background: #111; color: #00ff88; border: 1px solid #00ff88; }
+    #ai-chat-btn:hover, #scroll-top-btn:hover { transform: scale(1.1); background: white; color: black; border-color: white; }
 
-    .box img, .show-card img, .download-card img {
-      width: 100%;
-      height: 170px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      transition: 0.4s ease;
-    }
+    /* AI Chat Widget */
+    #ai-chat-box { position: fixed; bottom: 85px; right: 20px; width: 340px; height: 450px; background: #111; border: 1px solid #00ff88; border-radius: 15px; display: none; flex-direction: column; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9); z-index: 1000; overflow: hidden; }
+    .ai-header { background: linear-gradient(90deg, #0a0a0a, #151515); padding: 15px; color: #00ff88; font-weight: bold; display: flex; justify-content: space-between; border-bottom: 1px solid #222; }
+    .ai-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #0a0a0a; }
+    .ai-msg { max-width: 85%; padding: 10px 15px; border-radius: 12px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
+    .ai-msg.bot { background: #181818; color: #fff; align-self: flex-start; border-left: 3px solid #00ff88; border-bottom-left-radius: 2px; }
+    .ai-msg.user { background: #00ff88; color: #000; align-self: flex-end; font-weight: bold; border-bottom-right-radius: 2px; }
+    .ai-input-area { display: flex; padding: 12px; background: #151515; gap: 10px; border-top: 1px solid #222; }
+    .ai-input-area input { flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid #333; background: #050505; color: white; outline: none; }
+    .ai-input-area button { padding: 10px 15px; font-size: 14px; border-radius: 8px; }
 
-    .box h3 {
-      color: #00ff88;
-      margin-bottom: 10px;
-    }
+    /* Custom Toast Notification */
+    #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+    .toast { background: #111; border-left: 4px solid #00ff88; color: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-weight: bold; animation: slideIn 0.3s ease forwards, fadeOut 0.3s ease 2.7s forwards; display: flex; align-items: center; gap: 10px; }
 
-    .box p {
-      color: #aaa;
-    }
+    /* Animations */
+    @keyframes showUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    .reveal { opacity: 0; transform: translateY(40px); transition: 0.6s ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
 
-    /* Downloads Section */
-    .downloads {
-      padding: 50px 20px;
-      text-align: center;
-    }
-
-    .downloads h2 {
-      font-size: 32px;
-      margin-bottom: 25px;
-    }
-
-    .download-box {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .download-card {
-      background: #151515;
-      width: 280px;
-      padding: 25px;
-      border-radius: 15px;
-      border: 1px solid #222;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .download-card::before {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 3px;
-      background: #00ff88;
-      top: 0;
-      left: 0;
-    }
-
-    .download-card h3 {
-      color: #00ff88;
-      margin-bottom: 10px;
-    }
-
-    .download-card p {
-      color: #aaa;
-      margin-bottom: 15px;
-    }
-
-    .download-card button {
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    /* Showcase Section */
-    .showcase {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .showcase h2 {
-      font-size: 30px;
-      margin-bottom: 25px;
-    }
-
-    .showcase-box {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-
-    .show-card {
-      background: #111;
-      width: 280px;
-      padding: 25px;
-      border-radius: 15px;
-      border: 1px solid #222;
-    }
-
-    .show-card h3 {
-      color: #00ff88;
-      margin-bottom: 10px;
-    }
-
-    .show-card p {
-      color: #aaa;
-      margin-bottom: 15px;
-    }
-
-    /* Hover Animations for Cards */
-    .box, .download-card, .show-card, .category-box div {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: 0.5s ease;
-    }
-
-    .box:hover, .show-card:hover, .download-card:hover, .category-box div:hover {
-      transform: translateY(-10px) scale(1.03) !important;
-      border-color: #00ff88;
-      box-shadow: 0 0 25px rgba(0, 255, 136, 0.35);
-    }
-
-    .box:hover img, .show-card:hover img, .download-card:hover img {
-      transform: scale(1.08);
-    }
-
-    /* About & Contact */
-    .about {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .contact {
-      text-align: center;
-      padding: 50px 20px;
-      background: #0b0b0b;
-    }
-
-    .contact h2 {
-      color: #00ff88;
-      font-size: 30px;
-      margin-bottom: 15px;
-    }
-
-    .contact p {
-      color: #aaa;
-      margin-bottom: 20px;
-    }
-
-    .links {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-top: 25px;
-    }
-
-    .links a {
-      color: white;
-      text-decoration: none;
-      background: #151515;
-      padding: 12px 20px;
-      border-radius: 10px;
-      border: 1px solid #222;
-      transition: 0.3s;
-    }
-
-    .links a:hover {
-      color: #00ff88;
-      border-color: #00ff88;
-      transform: translateY(-5px);
-    }
-
-    /* Footer */
-    footer {
-      border-top: 1px solid #222;
-      background: #080808;
-      padding: 35px 20px;
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    footer h2 {
-      color: #00ff88;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
-    }
-
-    footer p {
-      color: #aaa;
-    }
-
-    footer .social {
-      margin: 15px 0;
-      color: white;
-      font-size: 16px;
-      word-spacing: 10px;
-    }
-
-    footer:hover h2 {
-      text-shadow: 0 0 15px #00ff88;
-    }
-
-    .copy {
-      font-size: 14px;
-    }
-
-    /* AI Chat Widget CSS */
-    #ai-chat-btn {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background: #00ff88;
-      color: #000;
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 26px;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-      transition: 0.3s;
-      z-index: 999;
-    }
-
-    #ai-chat-btn:hover {
-      transform: scale(1.1);
-    }
-
-    #ai-chat-box {
-      position: fixed;
-      bottom: 90px;
-      right: 25px;
-      width: 330px;
-      height: 420px;
-      background: #111;
-      border: 1px solid #00ff88;
-      border-radius: 15px;
-      display: none;
-      flex-direction: column;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      overflow: hidden;
-    }
-
-    .ai-header {
-      background: #181818;
-      padding: 12px 15px;
-      color: #00ff88;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #222;
-    }
-
-    .ai-messages {
-      flex: 1;
-      padding: 12px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .ai-msg {
-      max-width: 80%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .ai-msg.bot {
-      background: #1e1e1e;
-      color: #fff;
-      align-self: flex-start;
-      border-left: 3px solid #00ff88;
-    }
-
-    .ai-msg.user {
-      background: #00ff88;
-      color: #000;
-      align-self: flex-end;
-      font-weight: bold;
-    }
-
-    .ai-input-area {
-      display: flex;
-      padding: 10px;
-      background: #181818;
-      gap: 8px;
-    }
-
-    .ai-input-area input {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: 1px solid #333;
-      background: #050505;
-      color: white;
-      outline: none;
-    }
-
-    .ai-input-area button {
-      padding: 8px 15px;
-      font-size: 13px;
-      border-radius: 6px;
-    }
-
-    /* Keyframe Animations */
-    @keyframes show {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes pageLoad {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* Mobile Responsive Design */
+    /* Mobile Responsive */
     @media(max-width: 600px) {
-      header { padding: 15px; }
-      .logo { font-size: 22px; }
-      .hero { min-height: 70vh; padding: 15px; }
-      .hero h1 { font-size: 32px; }
-      .hero p { font-size: 15px; }
-      .hero button { width: 90%; max-width: 300px; }
-      .box, .download-card, .show-card { width: 100%; max-width: 330px; }
-      .features, .downloads { padding: 30px 15px; }
-      .features h2, .downloads h2 { font-size: 26px; }
-      button { padding: 12px 25px; }
-      .search-box { flex-direction: column; align-items: center; }
-      .search-box input { width: 90%; font-size: 16px; }
-      .category-box div { width: 130px; }
+      header { padding: 15px; } .logo { font-size: 24px; }
+      .hero h1 { font-size: 38px; } .hero p { font-size: 15px; }
+      .search-box { flex-direction: column; padding: 20px 15px; } .search-box input { width: 100%; max-width: none; }
+      .box, .download-card { width: 100%; }
       #ai-chat-box { width: 90%; right: 5%; bottom: 85px; }
+      section { padding: 40px 15px; }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="loader"></div>
+    <h2 style="color:#00ff88; letter-spacing: 2px;">MARD IS LOADING...</h2>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
 
   <!-- Header -->
   <header>
@@ -581,149 +163,171 @@
 
   <!-- Search -->
   <div class="search-box">
-    <input type="text" placeholder="Search Mods, Maps, Packs...">
+    <input type="text" placeholder="Search Mods, Maps, Shaders..." id="search-input">
     <button id="search-btn">Search</button>
   </div>
-
-  <!-- Categories -->
-  <section class="categories">
-    <h2>Categories</h2>
-    <div class="category-box">
-      <div>🎮<br>Minecraft</div>
-      <div>⚔️<br>Survival</div>
-      <div>🏰<br>Adventure</div>
-      <div>🔥<br>Shaders</div>
-    </div>
-  </section>
 
   <!-- Hero Section -->
   <section class="hero">
     <div>
       <h1>Welcome To <span>MARD</span></h1>
-      <p>Minecraft Mods • Maps • Gaming</p>
-      <button id="explore-btn">Explore Now</button>
+      <p>Your Ultimate Hub for Minecraft Mods, Maps & Shaders</p>
+      <button id="explore-btn">Explore Content</button>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <div class="stats">
+    <div class="stat-box"><h3>10K+</h3><p>Downloads</p></div>
+    <div class="stat-box"><h3>50+</h3><p>Premium Mods</p></div>
+    <div class="stat-box"><h3>24/7</h3><p>Active Gamers</p></div>
+  </div>
+
+  <!-- Categories -->
+  <section class="categories">
+    <h2>Categories</h2>
+    <div class="grid-container category-box">
+      <div class="reveal">🎮<br>Minecraft</div>
+      <div class="reveal">⚔️<br>Survival</div>
+      <div class="reveal">🏰<br>Adventure</div>
+      <div class="reveal">🔥<br>Shaders</div>
     </div>
   </section>
 
   <!-- Features Section -->
   <section class="features">
     <h2>Our Gaming Zone</h2>
-    <div class="boxes">
-      <div class="box">
+    <div class="grid-container">
+      <div class="box reveal">
         <img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025" alt="Minecraft Mods">
-        <h3>⛏ Mods</h3>
-        <p>Latest Minecraft mods aur addons.</p>
+        <h3>⛏ Premium Mods</h3>
+        <p>Enhance your gameplay with the latest and most stable Minecraft mods.</p>
       </div>
-      <div class="box">
+      <div class="box reveal">
         <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8" alt="Gaming Map">
-        <h3>🌍 Maps</h3>
-        <p>Adventure aur survival maps.</p>
+        <h3>🌍 Epic Maps</h3>
+        <p>Explore custom-built survival and adventure maps crafted for hardcore players.</p>
       </div>
-      <div class="box">
+      <div class="box reveal">
         <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e" alt="Texture Pack">
-        <h3>🎨 Packs</h3>
-        <p>Texture packs aur shaders.</p>
+        <h3>🎨 Realistic Shaders</h3>
+        <p>Transform your blocky world into a cinematic masterpiece with top shaders.</p>
       </div>
     </div>
   </section>
 
   <!-- Downloads Section -->
-  <section class="downloads">
+  <section class="downloads" id="downloads-section">
     <h2>Latest Downloads</h2>
-    <div class="download-box">
-      <div class="download-card">
+    <div class="grid-container">
+      <div class="download-card reveal">
         <h3>🔥 Survival World</h3>
-        <p>Explore new Minecraft adventures.</p>
-        <button class="download-btn">Download</button>
+        <p>A massive open-world map with custom dungeons and hidden loots.</p>
+        <button class="download-btn">Download Now</button>
       </div>
-      <div class="download-card">
-        <h3>⚔️ PvP Pack</h3>
-        <p>Improve your Minecraft gameplay.</p>
-        <button class="download-btn">Download</button>
+      <div class="download-card reveal">
+        <h3>⚔️ PvP Texture Pack</h3>
+        <p>Boost your FPS and get clearer vision for intense bedwars & PvP matches.</p>
+        <button class="download-btn">Download Now</button>
       </div>
-      <div class="download-card">
-        <h3>🏰 Adventure Map</h3>
-        <p>New worlds waiting for you.</p>
-        <button class="download-btn">Download</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Showcase Section -->
-  <section class="showcase">
-    <h2>Featured Content</h2>
-    <div class="showcase-box">
-      <div class="show-card">
-        <h3>🔥 Best Mods</h3>
-        <p>Discover amazing Minecraft mods and addons.</p>
-        <button>Explore</button>
-      </div>
-      <div class="show-card">
-        <h3>🌎 New Maps</h3>
-        <p>Find exciting worlds for your gameplay.</p>
-        <button>Explore</button>
-      </div>
-      <div class="show-card">
-        <h3>✨ Texture Packs</h3>
-        <p>Upgrade your Minecraft visuals.</p>
-        <button>Explore</button>
+      <div class="download-card reveal">
+        <h3>🏰 Medieval Castle Map</h3>
+        <p>A fully furnished huge medieval castle ready for your roleplay server.</p>
+        <button class="download-btn">Download Now</button>
       </div>
     </div>
   </section>
 
-  <!-- About Section -->
-  <section class="about">
-    <h2>About MARD</h2>
-    <p>MARD is a Minecraft gaming hub where you can find mods, maps, texture packs and gaming content.</p>
+  <!-- FAQ Section -->
+  <section class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-container">
+      <div class="faq-item reveal">
+        <div class="faq-question">How do I install these Minecraft Mods? <span>▼</span></div>
+        <div class="faq-answer">Download the .jar file from our site, install Forge or Fabric for your Minecraft version, and drop the file into your 'mods' folder.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question">Are these Texture Packs free? <span>▼</span></div>
+        <div class="faq-answer">Yes! Everything on MARD Gaming Hub is 100% free to download and safe to use.</div>
+      </div>
+      <div class="faq-item reveal">
+        <div class="faq-question">Do these shaders work on Mobile (MCPE)? <span>▼</span></div>
+        <div class="faq-answer">Currently, we focus on Java Edition. However, specific MCPE texture packs will be labeled clearly in the title.</div>
+      </div>
+    </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <h2>MARD 🎮</h2>
-    <p>Minecraft Gaming Hub</p>
-    <div class="social">YouTube • Discord • Instagram</div>
-    
     <section class="contact">
       <h2>Join MARD Community</h2>
-      <p>Stay updated with new Minecraft content.</p>
-      <button id="join-btn">Join Now</button>
+      <p>Stay updated with daily Minecraft content, giveaways, and support.</p>
+      <button id="join-btn">Join The Squad</button>
+      
+      <!-- APNE SOCIAL LINKS YAHAN DAALEIN -->
       <div class="links">
-        <a href="#">YouTube</a>
-        <a href="#">Discord</a>
-        <a href="#">Instagram</a>
+        <a href="https://youtube.com/" target="_blank">📺 YouTube</a>
+        <a href="https://discord.com/" target="_blank">🎮 Discord</a>
+        <a href="https://instagram.com/" target="_blank">📸 Instagram</a>
       </div>
     </section>
 
-    <p class="copy">© 2026 MARD. All Rights Reserved.</p>
+    <h2>MARD 🎮</h2>
+    <p>Ultimate Minecraft Gaming Hub</p>
+    <p class="copy">© 2026 MARD Gaming. All Rights Reserved.</p>
   </footer>
 
-  <!-- Floating AI Chatbot -->
+  <!-- Floating Buttons -->
+  <div id="scroll-top-btn" title="Go to top">⬆️</div>
   <div id="ai-chat-btn" title="Ask MARD AI">🤖</div>
 
+  <!-- AI Chat Widget -->
   <div id="ai-chat-box">
     <div class="ai-header">
-      <span>MARD Gaming AI 🤖</span>
-      <span id="close-ai" style="cursor:pointer;">✖</span>
+      <span>MARD AI Bot 🤖</span>
+      <span id="close-ai" style="cursor:pointer; font-size:18px;">✖</span>
     </div>
     <div class="ai-messages" id="ai-messages">
-      <div class="ai-msg bot">Hey Gamer! 🎮 Main MARD AI hu. Minecraft Mods, Shaders ya Recipes ke baare me kuch bhi poocho!</div>
+      <div class="ai-msg bot">Hello Gamer! 🎮 I am MARD AI. Ask me about Mods, Shaders, or how to download stuff!</div>
     </div>
     <div class="ai-input-area">
-      <input type="text" id="ai-input" placeholder="Ask AI (e.g. Best Shaders, Mods)...">
+      <input type="text" id="ai-input" placeholder="Type your message...">
       <button id="ai-send-btn">Send</button>
     </div>
   </div>
 
-  <!-- JavaScript Code -->
   <script>
-    // Search Functionality
+    // --- Custom Toast Notification Function ---
+    function showToast(message) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `✅ ${message}`;
+      container.appendChild(toast);
+      
+      // Remove toast after animation finishes (3 seconds)
+      setTimeout(() => { toast.remove(); }, 3000);
+    }
+
+    // --- Preloader Logic ---
+    window.addEventListener("load", function() {
+      setTimeout(() => {
+        document.getElementById("preloader").style.opacity = "0";
+        setTimeout(() => {
+          document.getElementById("preloader").style.display = "none";
+        }, 500);
+      }, 800); // Fake loading time for cool effect
+      checkScroll();
+    });
+
+    // --- Search Functionality ---
     const searchBtn = document.getElementById("search-btn");
-    const searchInput = document.querySelector(".search-box input");
+    const searchInput = document.getElementById("search-input");
 
     function performSearch() {
       let text = searchInput.value.toLowerCase().trim();
       if (text === "") {
-        alert("Please search something!");
+        showToast("Please type something to search!");
         return;
       }
 
@@ -740,67 +344,96 @@
           }
         }
       });
+      
+      if(found) showToast(`Found results for "${text}"`);
+      else showToast("No matching mods or maps found.");
     }
 
     searchBtn.addEventListener("click", performSearch);
-    searchInput.addEventListener("keypress", function(e) {
-      if (e.key === "Enter") performSearch();
-    });
+    searchInput.addEventListener("keypress", (e) => { if (e.key === "Enter") performSearch(); });
 
-    // Menu Toggle
+    // --- Menu Toggle ---
     const menu = document.querySelector(".menu");
     menu.addEventListener("click", function() {
-      menu.style.color = "#00ff88";
-      menu.innerHTML = (menu.innerHTML === "☰") ? "✖" : "☰";
+      showToast("Menu clicked! Add navigation links here.");
     });
 
-    // Hero Explore Button Scroll
-    const exploreBtn = document.getElementById("explore-btn");
-    exploreBtn.addEventListener("click", function() {
-      document.querySelector(".downloads").scrollIntoView({ behavior: "smooth" });
+    // --- Buttons ---
+    document.getElementById("explore-btn").addEventListener("click", () => {
+      document.getElementById("downloads-section").scrollIntoView({ behavior: "smooth" });
     });
 
-    // Download Links Handlers
+    document.getElementById("join-btn").addEventListener("click", () => {
+      showToast("Welcome to the MARD Community! 🎮");
+    });
+
+    // --- Download Links Array (YAHAN APNE ASLI LINKS DAALO) ---
     const downloadButtons = document.querySelectorAll(".download-btn");
-    const links = [
-      "https://example.com/survival-world",
-      "https://example.com/pvp-pack",
-      "https://example.com/adventure-map"
+    const actualLinks = [
+      "https://example.com/survival-world-link",  // Card 1
+      "https://example.com/pvp-pack-link",        // Card 2
+      "https://example.com/adventure-map-link"    // Card 3
     ];
 
     downloadButtons.forEach(function(button, index) {
       button.addEventListener("click", function(e) {
         e.stopPropagation();
-        window.open(links[index], "_blank");
+        showToast("Starting Download...");
+        setTimeout(() => {
+          window.open(actualLinks[index], "_blank");
+        }, 1000);
       });
     });
 
-    // Community Button
-    const joinBtn = document.getElementById("join-btn");
-    joinBtn.addEventListener("click", function() {
-      alert("Welcome to MARD Community 🎮");
+    // --- FAQ Accordion Logic ---
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', () => {
+        const answer = question.nextElementSibling;
+        const icon = question.querySelector('span');
+        
+        if (answer.classList.contains('active')) {
+          answer.classList.remove('active');
+          icon.style.transform = "rotate(0deg)";
+        } else {
+          // Close all others
+          document.querySelectorAll('.faq-answer').forEach(ans => ans.classList.remove('active'));
+          document.querySelectorAll('.faq-question span').forEach(icn => icn.style.transform = "rotate(0deg)");
+          
+          answer.classList.add('active');
+          icon.style.transform = "rotate(180deg)";
+        }
+      });
     });
 
-    // Scroll Reveal Effect
-    const revealItems = document.querySelectorAll(".box, .download-card, .show-card, .category-box div");
+    // --- Scroll Animations & Scroll-To-Top ---
+    const revealItems = document.querySelectorAll(".reveal");
+    const topBtn = document.getElementById("scroll-top-btn");
     
     function checkScroll() {
+      // Reveal elements
       revealItems.forEach(function(item) {
         let position = item.getBoundingClientRect().top;
         if (position < window.innerHeight - 50) {
-          item.style.opacity = "1";
-          item.style.transform = "translateY(0)";
+          item.classList.add("active");
         }
       });
+      
+      // Top Button visibility
+      if (window.scrollY > 500) {
+        topBtn.style.display = "flex";
+      } else {
+        topBtn.style.display = "none";
+      }
     }
 
     window.addEventListener("scroll", checkScroll);
-    window.addEventListener("load", function() {
-      checkScroll();
-      console.log("Welcome to MARD Gaming Hub 🎮");
+    
+    topBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    // AI Chatbot Logic
+    // --- AI Chatbot Logic ---
     const aiBtn = document.getElementById("ai-chat-btn");
     const aiBox = document.getElementById("ai-chat-box");
     const closeAi = document.getElementById("close-ai");
@@ -812,9 +445,7 @@
       aiBox.style.display = (aiBox.style.display === "flex") ? "none" : "flex";
     });
 
-    closeAi.addEventListener("click", () => {
-      aiBox.style.display = "none";
-    });
+    closeAi.addEventListener("click", () => { aiBox.style.display = "none"; });
 
     function sendAiMessage() {
       let userText = aiInput.value.trim();
@@ -828,33 +459,32 @@
       aiInput.value = "";
       aiMessages.scrollTop = aiMessages.scrollHeight;
 
+      // Bot Typing Delay Simulation
       setTimeout(() => {
         let botMsgDiv = document.createElement("div");
         botMsgDiv.className = "ai-msg bot";
         botMsgDiv.innerText = getAiReply(userText.toLowerCase());
         aiMessages.appendChild(botMsgDiv);
         aiMessages.scrollTop = aiMessages.scrollHeight;
-      }, 500);
+      }, 600);
     }
 
     aiSendBtn.addEventListener("click", sendAiMessage);
-    aiInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") sendAiMessage();
-    });
+    aiInput.addEventListener("keypress", (e) => { if (e.key === "Enter") sendAiMessage(); });
 
     function getAiReply(text) {
       if (text.includes("shader") || text.includes("graphics")) {
-        return "✨ Best Shaders for Minecraft: BSL Shaders, Complementary Reimagined, and OptiFine / Iris shaders support!";
-      } else if (text.includes("mod") || text.includes("addon")) {
-        return "⛏️ Popular Mods on MARD: OptiFine, Just Enough Items (JEI), WorldEdit, and Physics Mod!";
-      } else if (text.includes("download") || text.includes("link")) {
-        return "⬇️ Aap 'Latest Downloads' section me jaakar kisi bhi card par 'Download' button daba kar file download kar sakte ho!";
-      } else if (text.includes("hi") || text.includes("hello") || text.includes("hey")) {
-        return "Hey Gamer!⚡ Aaj konsa mod ya map try karna chahte ho?";
+        return "✨ For the best graphics, I recommend BSL Shaders or Complementary Reimagined!";
+      } else if (text.includes("mod") || text.includes("forge")) {
+        return "⛏️ We have tons of mods! Try searching for OptiFine, JEI, or physics mods in the search bar above.";
+      } else if (text.includes("download") || text.includes("map")) {
+        return "⬇️ Scroll to the 'Latest Downloads' section and click the download button on any map or pack!";
+      } else if (text.includes("hi") || text.includes("hello")) {
+        return "Hey there! ⚡ Ready to explore some epic Minecraft content today?";
       } else if (text.includes("pvp")) {
-        return "⚔️ PVP ke liye humara 'PvP Pack' download karo, isse FPS booster aur clean texture milta hai!";
+        return "⚔️ PVP? Definitely grab our custom PvP Texture Pack for an FPS boost and cleaner swords!";
       } else {
-        return "🤖 Nice question! Minecraft Mods, Shader Packs aur Maps explore karne ke liye humare Downloads section me check karein!";
+        return "🤖 Interesting! You can use the search bar above to find specific maps, mods, or texture packs on MARD.";
       }
     }
   </script>
